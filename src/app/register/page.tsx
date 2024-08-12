@@ -5,7 +5,8 @@ import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
 } from "firebase/auth";
-import { auth } from "@/firebase/firebase";
+import { auth, firestore } from "@/firebase/firebase";
+import { doc, setDoc } from "firebase/firestore";
 
 const RegisterPage = () => {
   const [user, setUser] = useState({
@@ -39,6 +40,13 @@ const RegisterPage = () => {
       const newUser = userCredentials.user;
       localStorage.setItem("registrationData", JSON.stringify(user));
 
+      await setDoc(doc(firestore, "users", newUser.uid), {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: newUser.email,
+        isAdmin: false,
+      });
+
       setUser({
         firstName: "",
         lastName: "",
@@ -46,6 +54,8 @@ const RegisterPage = () => {
         password: "",
         confirmPassword: "",
       });
+
+      router.push("/dashboard");
     } catch (e) {
       if (e instanceof Error) {
         setError(e.message);

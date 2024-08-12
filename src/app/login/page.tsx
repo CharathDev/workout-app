@@ -27,21 +27,13 @@ const LoginPage = () => {
       );
       const newUser = userCredentials.user;
 
-      const registrationData = localStorage.getItem("registrationData");
-      const { firstName = "", lastName = "" } = registrationData
-        ? JSON.parse(registrationData)
-        : {};
-
-      const userDoc = await getDoc(doc(firestore, "users", newUser.uid));
-      if (!userDoc.exists()) {
-        // Save user data to Firestore after email verification
-        await setDoc(doc(firestore, "users", newUser.uid), {
-          firstName,
-          lastName,
-          email: newUser.email,
-        });
+      let docRef = doc(firestore, "users", newUser.uid);
+      const userInfo = await getDoc(docRef);
+      if (userInfo.data()!.isAdmin) {
+        router.push("/admin/dashboard");
+      } else {
+        router.push("/users/dashboard");
       }
-      router.push("/dashboard");
     } catch (e) {
       if (e instanceof Error) {
         setError(e.message);
@@ -55,7 +47,7 @@ const LoginPage = () => {
     setUser({ ...user, [e.target.name]: e.target.value });
 
   return (
-    <div className="bg-gradient-to-b from-gray-600 to-black justify-center items-center h-screen w-screen flex flex-col relative">
+    <div className="justify-center items-center h-screen w-full flex flex-col relative">
       <h2 className="text-4xl font-medium text-white mb-10">Charath</h2>
       <div className="p-5 border border-gray-300 rounded">
         <form onSubmit={handleLogin} className="space-y-6 px-6 pb-6">
@@ -97,13 +89,13 @@ const LoginPage = () => {
             type="submit"
             className="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
-            Sign Up
+            Sign In
           </button>
         </form>
         <p className="text-sm font-medium text-gray-300 space-y-6 px-6 pb-4">
           Don't have an account?{" "}
           <Link href={"/register"} className="text-blue-700 hover:underline">
-            Login
+            Register
           </Link>
         </p>
       </div>

@@ -53,8 +53,12 @@ export default function HomePage() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div>{user ? "Redirecting to dashboard..." : "Redirecting to login"}</div>
-    </main>
+    <>
+      <main className="flex min-h-screen flex-col items-center justify-between p-24">
+        <div>
+          {user ? "Redirecting to dashboard..." : "Redirecting to login"}
+        </div>
+      </main>
+    </>
   );
 }
