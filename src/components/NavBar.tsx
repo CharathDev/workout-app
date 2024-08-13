@@ -36,13 +36,18 @@ const TopNav = () => {
     return menuClasses.join(" ");
   }
 
-  onAuthStateChanged(auth, async (user) => {
-    setUser(user);
-    if (user) {
-      let temp = await getDoc(doc(firestore, "users", user.uid));
-      setUserInfo(temp.data()!);
-    }
-  });
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      setUser(user);
+      if (user) {
+        let temp = await getDoc(doc(firestore, "users", user.uid));
+        console.log("pls");
+        setUserInfo(temp.data()!);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [router]);
 
   const handleLogout = async () => {
     try {

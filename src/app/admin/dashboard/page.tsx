@@ -6,7 +6,6 @@ import { auth, firestore } from "@/firebase/firebase";
 import type { User } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { PuffLoader } from "react-spinners";
-
 const DashboardPage = () => {
   const [user, setUser] = useState<User | null>(null);
   const [userName, setUserName] = useState<string | null>(null);
@@ -38,9 +37,9 @@ const DashboardPage = () => {
 
   return (
     <div className="bg-neutral-950">
-      <main className="flex flex-col items-center justify-center flex-grow p-5">
+      <main className="md:container mx-auto text-center">
         {userName && (
-          <h1 className="text-4xl font-bold mb-6 ml-10">{userName}</h1>
+          <h1 className="text-4xl font-bold">Hi, Admin {userName}</h1>
         )}
       </main>
     </div>

@@ -21,7 +21,7 @@ const RegisterPage = () => {
 
   const router = useRouter();
 
-  const handleRegister = async (event: FormEvent) => {
+  const handleRegister = async (event: any) => {
     event.preventDefault();
     setError(null);
     setMessage(null);
