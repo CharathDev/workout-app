@@ -12,6 +12,7 @@ import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 
 export default function AddExercise() {
   const storage = getStorage(app);
+  const [isOpen, setIsOpen] = useState(false);
   const muscle_groups = getMuscleGroups();
   const [exercise, setExercise] = useState({
     name: "",
@@ -54,6 +55,11 @@ export default function AddExercise() {
         muscle_groups: exercise.muscle_groups,
         gif_url: fileUrl,
       });
+      setExercise({
+        name: "",
+        muscle_groups: Array<string>(),
+      });
+      setIsOpen(false);
     });
   };
 
@@ -62,81 +68,103 @@ export default function AddExercise() {
     setGif(image);
   };
 
-  return (
-    <form className="w-1/2" onSubmit={onSubmitHandler}>
-      <h2 className="text-2xl mb-2">Add Exercise</h2>
-      <div className="mb-6">
-        <label
-          htmlFor="name"
-          className="font-medium block mb-2 text-gray-300 text-start"
-        >
-          Exercise Name
-        </label>
-        <input
-          type="text"
-          name="name"
-          value={exercise.name}
-          onChange={onChangeHandler}
-          required
-          className="border-2 outline-none sm:text-sm rounded-lg focus:ring-rose-500 focus:border-rose-500 block w-full p-2.5 bg-neutral-700 border-neutral-600 placeholder-neutral-500 text-white"
-        />
-      </div>
-      <div className="mb-6">
-        <label
-          htmlFor="name"
-          className="font-medium block mb-2 text-gray-300 text-start"
-        >
-          Exercise GIF
-        </label>
-        <input
-          type="file"
-          name="name"
-          onChange={onGifUploadHandler}
-          required
-          className="block w-full border-2 rounded-lg cursor-pointer text-gray-300 focus:outline-none bg-neutral-700 border-neutral-600 placeholder-neutral-400 file:bg-neutral-600 file:border-none file:text-gray-300 file:p-2.5 focus:ring-rose-500 focus:border-rose-500"
-        />
-      </div>
-      <div className="mb-6">
-        <label
-          htmlFor="name"
-          className="font-medium block mb-2 text-gray-300 text-start"
-        >
-          Muscle Groups
-        </label>
-        <div className="grid grid-cols-4 gap-4">
-          {muscle_groups.map((muscle_group, i) => (
-            <div className="relative flex gap-x-3" key={i}>
-              <div className="flex h-6 items-center">
-                <input
-                  id="candidates"
-                  name="muscle_groups"
-                  type="checkbox"
-                  value={muscle_group.id}
-                  onChange={onMuscleGroupChangeHandler}
-                  checked={isChecked(muscle_group.id)}
-                  className="h-4 w-4 rounded bg-gray-300 text-rose-600 focus:ring-rose-600"
-                />
-              </div>
-              <div className="text-sm leading-6">
-                <label
-                  htmlFor="candidates"
-                  className="font-medium text-gray-300"
-                >
-                  {muscle_group.name}
-                </label>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-      <div className="mb-6">
+  if (!isOpen) {
+    return (
+      <div className="flex justify-end my-2 mb-6">
         <button
-          className="bg-rose-500 hover:bg-rose-600 text-neutral-900 rounded-md font-bold p-3"
-          type="submit"
+          onClick={() => setIsOpen(true)}
+          className="bg-rose-500 hover:bg-rose-600 text-neutral-900 rounded-md font-bold p-3 mx-2"
         >
           + Add Exercise
         </button>
       </div>
-    </form>
+    );
+  }
+
+  return (
+    <div className="bg-neutral-900 rounded-lg p-5 my-2 flex flex-col justify-center items-center shadow-lg mb-6">
+      <form className="w-1/2" onSubmit={onSubmitHandler}>
+        <h2 className="text-2xl mb-2">Add Exercise</h2>
+        <div className="mb-6">
+          <label
+            htmlFor="name"
+            className="font-medium block mb-2 text-gray-300 text-start"
+          >
+            Exercise Name
+          </label>
+          <input
+            type="text"
+            name="name"
+            value={exercise.name}
+            onChange={onChangeHandler}
+            required
+            className="border-2 outline-none sm:text-sm rounded-lg focus:ring-rose-500 focus:border-rose-500 block w-full p-2.5 bg-neutral-700 border-neutral-600 placeholder-neutral-500 text-white"
+          />
+        </div>
+        <div className="mb-6">
+          <label
+            htmlFor="name"
+            className="font-medium block mb-2 text-gray-300 text-start"
+          >
+            Exercise GIF
+          </label>
+          <input
+            type="file"
+            name="name"
+            onChange={onGifUploadHandler}
+            required
+            className="block w-full border-2 rounded-lg cursor-pointer text-gray-300 focus:outline-none bg-neutral-700 border-neutral-600 placeholder-neutral-400 file:bg-neutral-600 file:border-none file:text-gray-300 file:p-2.5 focus:ring-rose-500 focus:border-rose-500"
+          />
+        </div>
+        <div className="mb-6">
+          <label
+            htmlFor="name"
+            className="font-medium block mb-2 text-gray-300 text-start"
+          >
+            Muscle Groups
+          </label>
+          <div className="grid grid-cols-4 gap-4">
+            {muscle_groups.map((muscle_group, i) => (
+              <div className="relative flex gap-x-3" key={i}>
+                <div className="flex h-6 items-center">
+                  <input
+                    id="candidates"
+                    name="muscle_groups"
+                    type="checkbox"
+                    value={muscle_group.id}
+                    onChange={onMuscleGroupChangeHandler}
+                    checked={isChecked(muscle_group.id)}
+                    className="h-4 w-4 rounded bg-gray-300 text-rose-600 focus:ring-rose-600"
+                  />
+                </div>
+                <div className="text-sm leading-6">
+                  <label
+                    htmlFor="candidates"
+                    className="font-medium text-gray-300"
+                  >
+                    {muscle_group.name}
+                  </label>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="mb-6">
+          <button
+            className="bg-rose-500 hover:bg-rose-600 text-neutral-900 rounded-md font-bold p-3 mx-2"
+            type="submit"
+          >
+            + Add Exercise
+          </button>
+          <button
+            className="bg-neutral-500 hover:bg-neutral-600 text-gray-300 rounded-md p-3 mx-2"
+            type="button"
+            onClick={() => setIsOpen(false)}
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
   );
 }

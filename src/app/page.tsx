@@ -15,30 +15,25 @@ export default function HomePage() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        if (user.emailVerified) {
-          const userDoc = await getDoc(doc(firestore, "users", user.uid));
-          if (!userDoc.exists()) {
-            // Retriece user data from local storage
-            const registrationData = localStorage.getItem("registrationData");
-            const { firstName = "", lastName = "" } = registrationData
-              ? JSON.parse(registrationData)
-              : {};
+        const userDoc = await getDoc(doc(firestore, "users", user.uid));
+        if (!userDoc.exists()) {
+          // Retriece user data from local storage
+          const registrationData = localStorage.getItem("registrationData");
+          const { firstName = "", lastName = "" } = registrationData
+            ? JSON.parse(registrationData)
+            : {};
 
-            await setDoc(doc(firestore, "users", user.uid), {
-              firstName,
-              lastName,
-              email: user.email,
-            });
+          await setDoc(doc(firestore, "users", user.uid), {
+            firstName,
+            lastName,
+            email: user.email,
+          });
 
-            // Clear registration data from local storage
-            localStorage.removeItem("registrationData");
-          }
-          setUser(user);
-          router.push("/dashboard");
-        } else {
-          setUser(null);
-          router.push("/login");
+          // Clear registration data from local storage
+          localStorage.removeItem("registrationData");
         }
+        setUser(user);
+        router.push("/dashboard");
       } else {
         setUser(null);
         router.push("/login");
