@@ -1,6 +1,6 @@
 "use client";
 
-import EditExercise from "@/components/forms/EditExercise";
+import EditExercise from "@/components/forms/exercise/EditExercise";
 import { deleteExercise, getExerciseById } from "@/controllers/exercises";
 import { getMuscleGroups } from "@/controllers/musclegroups";
 import Image from "next/image";

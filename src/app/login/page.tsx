@@ -32,7 +32,7 @@ const LoginPage = () => {
       if (userInfo.data()!.isAdmin) {
         router.push("/admin/dashboard");
       } else {
-        router.push("/users/dashboard");
+        router.push("/user/dashboard");
       }
     } catch (e) {
       if (e instanceof Error) {

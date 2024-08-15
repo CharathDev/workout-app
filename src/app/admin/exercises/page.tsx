@@ -1,5 +1,5 @@
 "use client";
-import AddExercise from "@/components/forms/AddExercise";
+import AddExercise from "@/components/forms/exercise/AddExercise";
 import { getAllExercises } from "@/controllers/exercises";
 import ExerciseItem from "./ExerciseItem";
 
