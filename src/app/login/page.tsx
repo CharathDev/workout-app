@@ -48,7 +48,9 @@ const LoginPage = () => {
 
   return (
     <div className="justify-center items-center h-screen w-full flex flex-col relative">
-      <h2 className="text-4xl font-medium text-white mb-10">Charath</h2>
+      <h2 className="text-4xl font-medium text-white mb-10">
+        Charath is gay as fuck
+      </h2>
       <div className="p-5 border border-gray-300 rounded">
         <form onSubmit={handleLogin} className="space-y-6 px-6 pb-6">
           <div>

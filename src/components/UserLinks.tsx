@@ -4,13 +4,13 @@ const UserLinks = () => {
   return (
     <>
       <Link
-        href={"/users/dashboard"}
+        href={"/user/dashboard"}
         className="mx-2 hover:text-gray-300 text-center py-2"
       >
         Dashboard
       </Link>
       <Link
-        href={"/users/routines"}
+        href={"/user/routines"}
         className="mx-2 hover:text-gray-300 text-center py-2"
       >
         Routines

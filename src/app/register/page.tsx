@@ -55,7 +55,7 @@ const RegisterPage = () => {
         confirmPassword: "",
       });
 
-      router.push("/dashboard");
+      router.push("/user/dashboard");
     } catch (e) {
       if (e instanceof Error) {
         setError(e.message);

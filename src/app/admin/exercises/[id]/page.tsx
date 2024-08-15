@@ -45,7 +45,7 @@ const ExerciseInfoPage = () => {
             </div>
 
             <div className="my-3 flex">
-              <EditExercise />
+              <EditExercise exerciseInfo={exercise} />
               <button
                 className="bg-rose-500 hover:bg-rose-600 text-neutral-900 rounded-md font-bold p-3 mx-2"
                 onClick={onDeleteHandler}
