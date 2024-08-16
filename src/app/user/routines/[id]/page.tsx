@@ -1,6 +1,7 @@
 "use client";
 
 import { getRoutineById } from "@/controllers/routines";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const RoutineInfoPage = () => {
@@ -21,9 +22,11 @@ const RoutineInfoPage = () => {
           )}
 
           <div className="flex justify-center items-center ">
-            <button className="px-4 p-2 bg-rose-500 hover:bg-rose-600 rounded-md">
-              +
-            </button>
+            <Link href={`/user/workouts/create_workout/${routineId}`}>
+              <div className="px-4 p-2 bg-rose-500 hover:bg-rose-600 rounded-md cursor-pointer">
+                +
+              </div>
+            </Link>
           </div>
         </main>
       ) : (

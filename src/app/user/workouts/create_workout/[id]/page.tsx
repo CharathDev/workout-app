@@ -1,0 +1,90 @@
+"use client";
+
+import AddExerciseTarget from "@/components/forms/workout/AddExerciseTarget";
+import { getAllExercises } from "@/controllers/exercises";
+import { WorkoutTarget } from "@/models/WorkoutTarget";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
+
+const CreateWorkoutPage = () => {
+  const searchParams = usePathname();
+  const routineId = searchParams.split("/")[4];
+  const exercises = getAllExercises();
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [workouts, setWorkouts] = useState<WorkoutTarget[]>([]);
+
+  const handleAddExercise = (e: any) => {
+    setIsOpen(true);
+  };
+
+  const onChangeHandler = (e: any, index: Number) => {
+    const updatedWorkouts: WorkoutTarget[] = workouts.map((workout, i) => {
+      if (i == index) {
+        return {
+          ...workout,
+          [e.target.name]:
+            parseInt(e.target.value) <= 0 ? 1 : parseInt(e.target.value),
+        } as WorkoutTarget;
+      } else {
+        return workout;
+      }
+    });
+    setWorkouts(updatedWorkouts);
+  };
+
+  return (
+    <div className="bg-neutral-950 flex justify-center items-center">
+      <main className="md:container mx-6 text-center">
+        <h1 className="text-4xl font-bold mb-10">Create Workout</h1>
+
+        <div className="bg-neutral-900 p-3 rounded-md">
+          {workouts.map((workoutTarget, i) => (
+            <div className="bg-neutral-800 p-3 rounded-md mb-6 flex">
+              <div className="flex justify-center items-center">
+                <h2 className="mx-2">{workoutTarget.exerciseId.name}</h2>
+              </div>
+              <div className="flex justify-center items-center">
+                <h2 className="me-2">Sets: </h2>
+                <input
+                  type="number"
+                  className="border-2 outline-none sm:text-sm rounded-lg focus:ring-rose-500 focus:border-rose-500 block w-12 p-2.5 bg-neutral-700 border-neutral-600 placeholder-neutral-500 text-white"
+                  name="set"
+                  value={workoutTarget.set.toString()}
+                  onChange={(e) => onChangeHandler(e, i)}
+                />
+              </div>
+            </div>
+          ))}
+          <div className="flex justify-center items-center mb-3">
+            <button
+              className="px-4 p-2 bg-rose-500 hover:bg-rose-600 rounded-md text-neutral-950 font-bold"
+              onClick={handleAddExercise}
+            >
+              Add Exercise
+            </button>
+
+            {isOpen && (
+              <AddExerciseTarget
+                exercises={exercises}
+                setWorkouts={setWorkouts}
+                workoutList={workouts}
+                setIsOpen={setIsOpen}
+              />
+            )}
+          </div>
+        </div>
+        <div className="flex justify-center items-center my-3">
+          <button
+            className="px-4 p-2 bg-rose-500 hover:bg-rose-600 rounded-md text-neutral-950 font-bold"
+            onClick={handleAddExercise}
+          >
+            Create
+          </button>
+        </div>
+      </main>
+    </div>
+  );
+};
+
+export default CreateWorkoutPage;
