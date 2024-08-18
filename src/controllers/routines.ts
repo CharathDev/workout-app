@@ -2,6 +2,7 @@
 
 import { firestore } from "@/firebase/firebase";
 import Routine from "@/models/Routine";
+import { Workout } from "@/models/Workout";
 import { collection, doc, onSnapshot, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
@@ -10,67 +11,69 @@ interface tempRoutine {
   name: string;
 }
 
-export function getAllRoutines(): Routine[] | null {
+export function getAllRoutines(userId: string): Routine[] | null {
   const [routines, setRoutines] = useState<Routine[] | null>(null);
 
   useEffect(() => {
     // Listener for the routines collection
     const routinesCollection = collection(firestore, "routines");
-    const unsubscribeRoutines = onSnapshot(
+    const routinesQuery = query(
       routinesCollection,
-      (routinesSnap) => {
-        const routinesData: Routine[] = [];
-
-        routinesSnap.forEach(async (routineDoc) => {
-          const routineData = {
-            id: routineDoc.id,
-            ...routineDoc.data(),
-          } as tempRoutine;
-
-          // Query the workouts collection for workouts with the current routine ID
-          const workoutsQuery = query(
-            collection(firestore, "workouts"),
-            where("routineId", "==", routineData.id)
-          );
-          const workoutIds: string[] = [];
-
-          const unsubscribeWorkouts = onSnapshot(
-            workoutsQuery,
-            (workoutsSnap) => {
-              workoutsSnap.forEach((workoutDoc) => {
-                workoutIds.push(workoutDoc.id);
-              });
-
-              // Update the routine with its workout IDs
-              const updatedRoutine: Routine = {
-                ...routineData,
-                workouts: workoutIds,
-              };
-
-              // Replace or add the updated routine in the routinesData array
-              const routineIndex = routinesData.findIndex(
-                (routine) => routine.id === updatedRoutine.id
-              );
-              if (routineIndex >= 0) {
-                routinesData[routineIndex] = updatedRoutine;
-              } else {
-                routinesData.push(updatedRoutine);
-              }
-
-              setRoutines([...routinesData]); // Trigger re-render
-            }
-          );
-
-          () => unsubscribeWorkouts();
-        });
-      }
+      where("user", "==", userId)
     );
+    const unsubscribeRoutines = onSnapshot(routinesQuery, (routinesSnap) => {
+      const routinesData: Routine[] = [];
+      console.log(userId);
+      routinesSnap.forEach(async (routineDoc) => {
+        const routineData = {
+          id: routineDoc.id,
+          ...routineDoc.data(),
+        } as tempRoutine;
+
+        // Query the workouts collection for workouts with the current routine ID
+        const workoutsQuery = query(
+          collection(firestore, "workouts"),
+          where("routineId", "==", routineData.id)
+        );
+        const workoutIds: string[] = [];
+
+        const unsubscribeWorkouts = onSnapshot(
+          workoutsQuery,
+          (workoutsSnap) => {
+            const workoutsData: Workout[] = workoutsSnap.docs.map(
+              (workoutDoc) => ({
+                id: workoutDoc.id,
+                ...workoutDoc.data(),
+              })
+            ) as Workout[];
+
+            // Update the routine with its workout IDs
+            const updatedRoutine: Routine = {
+              ...routineData,
+              workouts: workoutsData,
+            };
+
+            // Replace or add the updated routine in the routinesData array
+            const routineIndex = routinesData.findIndex(
+              (routine) => routine.id === updatedRoutine.id
+            );
+            if (routineIndex >= 0) {
+              routinesData[routineIndex] = updatedRoutine;
+            } else {
+              routinesData.push(updatedRoutine);
+            }
+
+            setRoutines([...routinesData]); // Trigger re-render
+          }
+        );
+
+        () => unsubscribeWorkouts();
+      });
+    });
 
     // Cleanup listener on component unmount
-    return () => {
-      unsubscribeRoutines();
-    };
-  }, []);
+    return () => unsubscribeRoutines();
+  }, [userId]);
 
   return routines;
 }
@@ -98,19 +101,24 @@ export function getRoutineById(routineId: string): Routine | null {
         const unsubscribeWorkouts = onSnapshot(
           workoutsQuery,
           (workoutsSnap) => {
-            workoutsSnap.forEach((workoutDoc) => {
-              workoutIds.push(workoutDoc.id);
-            });
+            const workoutsData: Workout[] = workoutsSnap.docs.map(
+              (workoutDoc) => ({
+                id: workoutDoc.id,
+                ...workoutDoc.data(),
+              })
+            ) as Workout[];
 
             // Update the routine with its workout IDs
             const populatedRoutine: Routine = {
               ...routineData,
-              workouts: workoutIds,
+              workouts: workoutsData,
             };
 
             setRoutine(populatedRoutine);
           }
         );
+
+        return () => unsubscribeWorkouts();
       } else {
         setRoutine(null); // Handle case where the routine does not exist
       }

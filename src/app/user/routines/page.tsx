@@ -2,10 +2,27 @@
 
 import AddRoutine from "@/components/forms/routine/AddRoutine";
 import { getAllRoutines } from "@/controllers/routines";
+import { auth } from "@/firebase/firebase";
+import { onAuthStateChanged, User } from "firebase/auth";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const RoutinesPage = () => {
-  const routines = getAllRoutines();
+  const router = useRouter();
+  const [currentUser, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+    });
+
+    return () => unsubscribe();
+  }, [router]);
+
+  const routines = currentUser
+    ? getAllRoutines(currentUser.uid)
+    : getAllRoutines("");
 
   return (
     <div className="bg-neutral-950 flex justify-center">
@@ -30,7 +47,7 @@ const RoutinesPage = () => {
             ))}
           </div>
         ) : (
-          <>Loading</>
+          <>You do not have any routines</>
         )}
       </main>
     </div>

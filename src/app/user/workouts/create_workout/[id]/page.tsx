@@ -1,6 +1,7 @@
 "use client";
 
 import AddExerciseTarget from "@/components/forms/workout/AddExerciseTarget";
+import AddWorkoutNamePage from "@/components/forms/workout/AddWorkoutName";
 import { getAllExercises } from "@/controllers/exercises";
 import { WorkoutTarget } from "@/models/WorkoutTarget";
 import { usePathname } from "next/navigation";
@@ -12,10 +13,15 @@ const CreateWorkoutPage = () => {
   const exercises = getAllExercises();
 
   const [isOpen, setIsOpen] = useState(false);
+  const [workoutNameIsOpen, setWorkoutNameIsOpen] = useState(false);
   const [workouts, setWorkouts] = useState<WorkoutTarget[]>([]);
 
   const handleAddExercise = (e: any) => {
     setIsOpen(true);
+  };
+
+  const handleCreateWorkout = (e: any) => {
+    setWorkoutNameIsOpen(true);
   };
 
   const onChangeHandler = (e: any, index: Number) => {
@@ -40,7 +46,7 @@ const CreateWorkoutPage = () => {
 
         <div className="bg-neutral-900 p-3 rounded-md">
           {workouts.map((workoutTarget, i) => (
-            <div className="bg-neutral-800 p-3 rounded-md mb-6 flex">
+            <div className="bg-neutral-800 p-3 rounded-md mb-6 grid grid-cols-4">
               <div className="flex justify-center items-center">
                 <h2 className="mx-2">{workoutTarget.exerciseId.name}</h2>
               </div>
@@ -48,9 +54,29 @@ const CreateWorkoutPage = () => {
                 <h2 className="me-2">Sets: </h2>
                 <input
                   type="number"
-                  className="border-2 outline-none sm:text-sm rounded-lg focus:ring-rose-500 focus:border-rose-500 block w-12 p-2.5 bg-neutral-700 border-neutral-600 placeholder-neutral-500 text-white"
+                  className="border-2 outline-none sm:text-sm rounded-lg focus:ring-rose-500 focus:border-rose-500 block w-14 p-2.5 bg-neutral-700 border-neutral-600 placeholder-neutral-500 text-white"
                   name="set"
                   value={workoutTarget.set.toString()}
+                  onChange={(e) => onChangeHandler(e, i)}
+                />
+              </div>
+              <div className="flex justify-center items-center">
+                <h2 className="me-2">Min Reps: </h2>
+                <input
+                  type="number"
+                  className="border-2 outline-none sm:text-sm rounded-lg focus:ring-rose-500 focus:border-rose-500 block w-14 p-2.5 bg-neutral-700 border-neutral-600 placeholder-neutral-500 text-white"
+                  name="minReps"
+                  value={workoutTarget.minReps.toString()}
+                  onChange={(e) => onChangeHandler(e, i)}
+                />
+              </div>
+              <div className="flex justify-center items-center">
+                <h2 className="me-2">Max Reps: </h2>
+                <input
+                  type="number"
+                  className="border-2 outline-none sm:text-sm rounded-lg focus:ring-rose-500 focus:border-rose-500 block w-14 p-2.5 bg-neutral-700 border-neutral-600 placeholder-neutral-500 text-white"
+                  name="maxReps"
+                  value={workoutTarget.maxReps.toString()}
                   onChange={(e) => onChangeHandler(e, i)}
                 />
               </div>
@@ -77,10 +103,18 @@ const CreateWorkoutPage = () => {
         <div className="flex justify-center items-center my-3">
           <button
             className="px-4 p-2 bg-rose-500 hover:bg-rose-600 rounded-md text-neutral-950 font-bold"
-            onClick={handleAddExercise}
+            onClick={handleCreateWorkout}
           >
             Create
           </button>
+
+          {workoutNameIsOpen && (
+            <AddWorkoutNamePage
+              workouts={workouts}
+              setWorkoutNameIsOpen={setWorkoutNameIsOpen}
+              routineId={routineId}
+            />
+          )}
         </div>
       </main>
     </div>

@@ -1,16 +1,29 @@
 "use client";
-import { firestore } from "@/firebase/firebase";
-import { addDoc, collection } from "firebase/firestore";
-import { useState } from "react";
+import { auth, firestore } from "@/firebase/firebase";
+import { onAuthStateChanged, User } from "firebase/auth";
+import { addDoc, collection, doc, getDoc } from "firebase/firestore";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const AddRoutine = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState("");
+  const router = useRouter();
+  const [currentUser, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+    });
+
+    return () => unsubscribe();
+  }, [router]);
 
   const onSubmitHandler = async (e: any) => {
     e.preventDefault();
     await addDoc(collection(firestore, "routines"), {
       name: name,
+      user: currentUser!.uid,
     });
     setName("");
     setIsOpen(false);
