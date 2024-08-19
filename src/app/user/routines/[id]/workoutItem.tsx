@@ -10,10 +10,7 @@ const WorkoutItem = ({ workout }: { workout: Workout }) => {
   const router = useRouter();
 
   return (
-    <div
-      className="bg-neutral-800 p-5 cursor-pointer rounded-md flex justify-between my-4 hover:bg-neutral-700 w-full text-center"
-      onClick={() => router.push("/user/routines")}
-    >
+    <div className="bg-neutral-800 p-5 rounded-md flex justify-between my-4  w-full text-center">
       <div className="flex flex-col items-start justify-center">
         <h2 className="text-lg font-bold">{workout.name}</h2>
 
@@ -28,9 +25,17 @@ const WorkoutItem = ({ workout }: { workout: Workout }) => {
       </div>
       <div className="flex justify-center items-center">
         <button
-          className="px-4 py-2 font-bold bg-rose-500 text-neutral-950 rounded-md hover:bg-rose-600"
-          onClick={(e) => {
-            e.stopPropagation();
+          className="mx-1 px-4 py-2 font-bold bg-cyan-500 text-neutral-950 rounded-md hover:bg-cyan-600"
+          // onClick={() => {
+          //   router.push(`/user/workouts/${workout.id}`);
+          // }}
+        >
+          Edit
+        </button>
+        <button
+          className="mx-1 px-4 py-2 font-bold bg-rose-500 text-neutral-950 rounded-md hover:bg-rose-600"
+          onClick={() => {
+            router.push(`/user/workouts/${workout.id}`);
           }}
         >
           Log

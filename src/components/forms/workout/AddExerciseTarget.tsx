@@ -32,6 +32,7 @@ const AddExerciseTarget = ({
         id: "",
         workoutId: "",
         exerciseId: id,
+        exerciseName: id.name,
         set: 1,
         minReps: 1,
         maxReps: 1,
