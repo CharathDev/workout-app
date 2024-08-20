@@ -2,10 +2,11 @@
 
 import { getWorkoutItemsById } from "@/controllers/workoutitems";
 import { getWorkoutById } from "@/controllers/workouts";
-import { firestore } from "@/firebase/firebase";
+import { auth, firestore } from "@/firebase/firebase";
 import LogEntry from "@/models/LogEntry";
 import { WorkoutTarget } from "@/models/WorkoutTarget";
-import { addDoc, collection } from "firebase/firestore";
+import { onAuthStateChanged, User } from "firebase/auth";
+import { addDoc, collection, doc, getDoc } from "firebase/firestore";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -14,6 +15,7 @@ const LogWorkoutPage = () => {
   const workoutId = searchParams.split("/")[3];
   const workoutInfo = getWorkoutById(workoutId);
   const workoutTargetInfo = getWorkoutItemsById(workoutId);
+  const [user, setUser] = useState<User | null>(null);
   const generateLogEntries = (
     workoutTargetInfo: WorkoutTarget[],
     workoutId: string
@@ -46,6 +48,19 @@ const LogWorkoutPage = () => {
     }
   }, [workoutTargetInfo]);
 
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        setUser(user);
+      } else {
+        router.push("/login");
+      }
+    });
+
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
+  }, [router]);
+
   const onWeightChangeHandler = (e: any, i: number) => {
     setLog(
       log.map((logEntry, index) => {
@@ -75,24 +90,27 @@ const LogWorkoutPage = () => {
   };
 
   const onSubmitHandler = async (e: any) => {
-    const logInfo = await addDoc(collection(firestore, "logs"), {
-      workoutId: workoutId,
-      date: Date.now(),
-    });
-
-    log.forEach(async (logEntry, i) => {
-      await addDoc(collection(firestore, "log_items"), {
-        logId: logInfo.id,
+    if (user) {
+      const logInfo = await addDoc(collection(firestore, "logs"), {
         workoutId: workoutId,
-        exerciseId: logEntry.exerciseId,
-        set: logEntry.set,
-        weight: logEntry.weight,
-        reps: logEntry.reps,
-        order: i,
+        userId: user.uid,
+        date: Date.now(),
       });
-    });
 
-    router.push("/user/routines");
+      log.forEach(async (logEntry, i) => {
+        await addDoc(collection(firestore, "log_items"), {
+          logId: logInfo.id,
+          workoutId: workoutId,
+          exerciseId: logEntry.exerciseId,
+          set: logEntry.set,
+          weight: logEntry.weight,
+          reps: logEntry.reps,
+          order: i,
+        });
+      });
+
+      router.push("/user/routines");
+    }
   };
 
   console.log(log);

@@ -20,6 +20,9 @@ const config: Config = {
         "light-red": "#ef233c",
         "darker-red": "#d90429",
       },
+      gap: {
+        "0.5": "2px",
+      },
     },
   },
   plugins: [],
