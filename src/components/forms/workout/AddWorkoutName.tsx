@@ -23,7 +23,7 @@ const AddWorkoutNamePage = ({
       name: name,
     });
     const workoutId = workoutRef.id;
-    workouts.forEach(async (workoutItem) => {
+    workouts.forEach(async (workoutItem, i) => {
       await addDoc(collection(firestore, "workout_items"), {
         workoutId: workoutId,
         exerciseId: workoutItem.exerciseId.id,
@@ -31,6 +31,7 @@ const AddWorkoutNamePage = ({
         set: workoutItem.set,
         minReps: workoutItem.minReps,
         maxReps: workoutItem.maxReps,
+        order: i,
       });
     });
     router.push("../../");

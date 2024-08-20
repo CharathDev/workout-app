@@ -36,5 +36,10 @@ export const getWorkoutItemsById = (id: string): WorkoutTarget[] | null => {
     };
   }, [id]);
 
+  if (workoutTargets)
+    workoutTargets.sort(
+      (a, b) => parseInt(a.order.toString()) - parseInt(b.order.toString())
+    );
+
   return workoutTargets;
 };

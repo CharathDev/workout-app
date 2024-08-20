@@ -8,4 +8,5 @@ export interface WorkoutTarget {
   set: Number;
   minReps: Number;
   maxReps: Number;
+  order: Number;
 }
