@@ -9,6 +9,7 @@ import { onAuthStateChanged, User } from "firebase/auth";
 import { addDoc, collection, doc, getDoc } from "firebase/firestore";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import ExerciseInfoModal from "./ExerciseInfoModal";
 
 const LogWorkoutPage = () => {
   const searchParams = usePathname();
@@ -134,10 +135,14 @@ const LogWorkoutPage = () => {
                 }
                 return (
                   <div className="p-3 mb-6 w-full" key={i}>
-                    <div className="flex justify-between items-center pb-3">
-                      <h2 className="mx-2">{i + 1}</h2>
+                    <div className="grid grid-cols-3 pb-3">
+                      <h2 className="mx-2 text-left">{i + 1}</h2>
                       <h2 className="mx-2">{workoutTarget.exerciseName}</h2>
-                      <h2 className="mx-2"></h2>
+                      <div className="flex justify-end">
+                        <ExerciseInfoModal
+                          exerciseId={workoutTarget.exerciseId.toString()}
+                        />
+                      </div>
                     </div>
                     <div className="pt-3">
                       <div className="grid grid-cols-3 mb-3 text-neutral-500">
