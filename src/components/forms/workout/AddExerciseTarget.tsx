@@ -36,6 +36,7 @@ const AddExerciseTarget = ({
         set: 1,
         minReps: 1,
         maxReps: 1,
+        order: 0,
       } as WorkoutTarget,
     ]);
     setIsOpen(false);

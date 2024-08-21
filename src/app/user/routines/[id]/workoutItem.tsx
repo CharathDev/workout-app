@@ -1,6 +1,8 @@
 "use client";
 import { getWorkoutItemsById } from "@/controllers/workoutitems";
+import { firestore } from "@/firebase/firebase";
 import { Workout } from "@/models/Workout";
+import { deleteDoc, doc, setDoc } from "firebase/firestore";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -8,6 +10,15 @@ const WorkoutItem = ({ workout }: { workout: Workout }) => {
   let workout_targets = getWorkoutItemsById(workout.id);
 
   const router = useRouter();
+
+  const handleDelete = async () => {
+    await setDoc(doc(firestore, "workouts", workout.id), {
+      name: workout.name,
+      routineId: workout.routineId,
+      isActivated: false,
+    });
+    console.log("pls");
+  };
 
   return (
     <div className="bg-neutral-800 p-5 rounded-md flex justify-between my-4  w-full text-center">
@@ -25,15 +36,13 @@ const WorkoutItem = ({ workout }: { workout: Workout }) => {
       </div>
       <div className="flex justify-center items-center">
         <button
-          className="mx-1 px-4 py-2 font-bold bg-cyan-500 text-neutral-950 rounded-md hover:bg-cyan-600"
-          // onClick={() => {
-          //   router.push(`/user/workouts/${workout.id}`);
-          // }}
+          className="mx-1 px-4 py-2 font-bold bg-rose-500 text-neutral-950 rounded-md hover:bg-rose-600"
+          onClick={handleDelete}
         >
-          Edit
+          Delete
         </button>
         <button
-          className="mx-1 px-4 py-2 font-bold bg-rose-500 text-neutral-950 rounded-md hover:bg-rose-600"
+          className="mx-1 px-4 py-2 font-bold bg-cyan-500 text-neutral-950 rounded-md hover:bg-cyan-600"
           onClick={() => {
             router.push(`/user/workouts/${workout.id}`);
           }}

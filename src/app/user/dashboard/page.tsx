@@ -9,6 +9,8 @@ import { PuffLoader } from "react-spinners";
 import Log from "@/models/Log";
 import { getLogsByUser } from "@/controllers/logs";
 import HeatmapCalender from "@/components/dashboard/heatmapCalender";
+import MusclesWorked from "@/components/dashboard/musclesWorked";
+import { getTotalVolumeForUser } from "@/controllers/musclegroups";
 
 const DashboardPage = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -16,6 +18,7 @@ const DashboardPage = () => {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const logs = getLogsByUser();
+  const totalVolume = getTotalVolumeForUser();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -47,11 +50,24 @@ const DashboardPage = () => {
           <h1 className="text-4xl font-bold">{userName}</h1>
 
           <div className="bg-neutral-900 rounded-lg md:p-5 p-2 my-6 flex flex-col justify-center items-center shadow-lg">
-            <div className="bg-neutral-800 rounded-lg md:p-5 p-2 md:hidden flex flex-col justify-center items-center shadow-lg w-full">
+            <div className="bg-neutral-800 rounded-lg md:p-5 p-2 md:hidden flex flex-col justify-center items-center shadow-lg w-full mb-5">
+              <h2 className="text-lg mb-2">Workouts</h2>
               {logs && <HeatmapCalender logs={logs} weeksToShow={18} />}
             </div>
-            <div className="bg-neutral-800 rounded-lg md:p-5 p-2 md:flex hidden flex-col justify-center items-center shadow-lg w-full">
+            <div className="bg-neutral-800 rounded-lg md:p-5 p-2 md:flex hidden flex-col justify-center items-center shadow-lg w-full mb-5">
+              <h2 className="text-2xl mb-2 font-bold">Workouts</h2>
               {logs && <HeatmapCalender logs={logs} weeksToShow={32} />}
+            </div>
+
+            <div className="bg-neutral-800 rounded-lg md:p-5 p-2 flex flex-col justify-center items-center shadow-lg w-full">
+              <div className="text-2xl mb-4 font-bold">Stats</div>
+              <div className="flex mb-4">
+                <div className="">
+                  <h2>{totalVolume}kg</h2>
+                  <h2 className="font-bold text-neutral-500">Total Volume</h2>
+                </div>
+              </div>
+              <MusclesWorked />
             </div>
           </div>
         </main>

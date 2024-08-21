@@ -50,7 +50,9 @@ export function getAllRoutines(userId: string): Routine[] | null {
             // Update the routine with its workout IDs
             const updatedRoutine: Routine = {
               ...routineData,
-              workouts: workoutsData,
+              workouts: workoutsData.filter(
+                (workoutData) => workoutData.isActivated == true
+              ),
             };
 
             // Replace or add the updated routine in the routinesData array
@@ -111,7 +113,9 @@ export function getRoutineById(routineId: string): Routine | null {
             // Update the routine with its workout IDs
             const populatedRoutine: Routine = {
               ...routineData,
-              workouts: workoutsData,
+              workouts: workoutsData.filter(
+                (workoutData) => workoutData.isActivated == true
+              ),
             };
 
             setRoutine(populatedRoutine);

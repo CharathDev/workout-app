@@ -21,6 +21,7 @@ const AddWorkoutNamePage = ({
     const workoutRef = await addDoc(collection(firestore, "workouts"), {
       routineId: routineId,
       name: name,
+      isActivated: true,
     });
     const workoutId = workoutRef.id;
     workouts.forEach(async (workoutItem, i) => {

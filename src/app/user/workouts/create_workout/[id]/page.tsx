@@ -4,14 +4,15 @@ import AddExerciseTarget from "@/components/forms/workout/AddExerciseTarget";
 import AddWorkoutNamePage from "@/components/forms/workout/AddWorkoutName";
 import { getAllExercises } from "@/controllers/exercises";
 import { WorkoutTarget } from "@/models/WorkoutTarget";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
+import { IoIosArrowRoundBack } from "react-icons/io";
 
 const CreateWorkoutPage = () => {
   const searchParams = usePathname();
   const routineId = searchParams.split("/")[4];
   const exercises = getAllExercises();
-
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [workoutNameIsOpen, setWorkoutNameIsOpen] = useState(false);
   const [workouts, setWorkouts] = useState<WorkoutTarget[]>([]);
@@ -42,7 +43,16 @@ const CreateWorkoutPage = () => {
   return (
     <div className="bg-neutral-950 flex justify-center items-center">
       <main className="md:container mx-6 text-center">
-        <h1 className="text-4xl font-bold mb-10">Create Workout</h1>
+        <div className="flex justify-between items-center mb-10">
+          <button
+            className="rounded-full bg-neutral-950 hover:bg-neutral-900 p-2"
+            onClick={() => router.push(`/user/routines/${routineId}`)}
+          >
+            <IoIosArrowRoundBack size={32} />
+          </button>
+          <h1 className="text-4xl font-bold">Create Workout</h1>
+          <div></div>
+        </div>
 
         <div className="bg-neutral-900 p-3 rounded-md">
           {workouts.map((workoutTarget, i) => (
