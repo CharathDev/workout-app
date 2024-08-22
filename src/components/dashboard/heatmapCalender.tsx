@@ -24,9 +24,9 @@ const HeatmapCalender = ({
   let endingDate = new Date();
   let startingDate = new Date(
     endingDate.getTime() -
-      1000 * 60 * 60 * 24 * (weeksToShow * 7 - 1 - endingDate.getDay())
+      1000 * 60 * 60 * 24 * (weeksToShow * 7 + endingDate.getDay())
   );
-  const daysInMonth = weeksToShow * 7 - endingDate.getDay();
+  const daysInMonth = weeksToShow * 7 + 1 + endingDate.getDay();
   const calenderGrid = Array.from({ length: daysInMonth }, (_, i) => {
     const date = new Date(startingDate);
     date.setDate(startingDate.getDate() + i);
