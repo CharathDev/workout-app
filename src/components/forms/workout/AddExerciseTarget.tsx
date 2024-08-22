@@ -1,4 +1,5 @@
 import Exercise from "@/models/Exercise";
+import MuscleGroup from "@/models/MuscleGroup";
 import { WorkoutTarget } from "@/models/WorkoutTarget";
 import { Dispatch, SetStateAction, useState } from "react";
 
@@ -7,19 +8,42 @@ const AddExerciseTarget = ({
   setWorkouts,
   workoutList,
   setIsOpen,
+  muscleGroups,
 }: {
   exercises: Exercise[] | null;
   setWorkouts: Dispatch<SetStateAction<WorkoutTarget[]>>;
   workoutList: WorkoutTarget[];
   setIsOpen: Dispatch<SetStateAction<boolean>>;
+  muscleGroups: MuscleGroup[];
 }) => {
   const [search, setSearch] = useState("");
-  const searchedExercises =
-    search == ""
-      ? exercises
-      : exercises?.filter((exercise) => {
-          return exercise.name.toLowerCase().includes(search);
-        });
+  const [filter, setFilter] = useState("");
+  const searchedExercises = () => {
+    if (filter != "" && search == "") {
+      return exercises?.filter((exercise) => {
+        return (
+          exercise.muscle_groups.find(
+            (muscle_group) => muscle_group.id == filter
+          ) != null
+        );
+      });
+    } else if (filter == "" && search != "") {
+      return exercises?.filter((exercise) => {
+        return exercise.name.toLowerCase().includes(search);
+      });
+    } else if (filter != "" && search != "") {
+      return exercises?.filter((exercise) => {
+        return (
+          exercise.name.toLowerCase().includes(search) &&
+          exercise.muscle_groups.find(
+            (muscle_group) => muscle_group.id == filter
+          ) != null
+        );
+      });
+    }
+
+    return exercises;
+  };
 
   const onSubmitHandler = (e: any) => {
     e.preventDefault();
@@ -81,24 +105,44 @@ const AddExerciseTarget = ({
               </button>
             </div>
             <div className="p-4 md:p-5 space-y-4">
-              <div className="mb-6">
-                <label
-                  htmlFor="name"
-                  className="font-medium block mb-2 text-gray-300 text-start"
-                >
-                  Search By Name
-                </label>
-                <input
-                  type="text"
-                  name="name"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  required
-                  className="border-2 outline-none sm:text-sm rounded-lg focus:ring-rose-500 focus:border-rose-500 block w-full p-2.5 bg-neutral-700 border-neutral-600 placeholder-neutral-500 text-white"
-                />
+              <div className="mb-6 grid grid-cols-12 gap-1">
+                <div className="col-span-9">
+                  <label
+                    htmlFor="name"
+                    className="font-medium block mb-2 text-gray-300 text-start"
+                  >
+                    Search By Name
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    required
+                    className="border-2 outline-none sm:text-sm rounded-lg focus:ring-rose-500 focus:border-rose-500 block w-full p-2.5 bg-neutral-700 border-neutral-600 placeholder-neutral-500 text-white"
+                  />
+                </div>
+                <div className="col-span-3">
+                  <label
+                    htmlFor="name"
+                    className="font-medium block mb-2 text-gray-300 text-start"
+                  >
+                    Filter
+                  </label>
+                  <select
+                    onChange={(e) => setFilter(e.target.value)}
+                    value={filter}
+                    className="border-2 outline-none sm:text-sm rounded-lg focus:ring-rose-500 focus:border-rose-500 block w-full p-2.5 bg-neutral-700 border-neutral-600 placeholder-neutral-500 text-white"
+                  >
+                    <option value={""}>All</option>
+                    {muscleGroups.map((muscleGroup) => (
+                      <option value={muscleGroup.id}>{muscleGroup.name}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
               <div className="overflow-y-auto h-32">
-                {searchedExercises?.map((exercise, i) => (
+                {searchedExercises()?.map((exercise, i) => (
                   <div
                     key={i}
                     className="bg-neutral-600 hover:bg-neutral-500 text-center p-2 my-1 rounded-md cursor-pointer hover:ring-2 hover:ring-rose-500 mx-1"

@@ -3,6 +3,7 @@
 import AddExerciseTarget from "@/components/forms/workout/AddExerciseTarget";
 import AddWorkoutNamePage from "@/components/forms/workout/AddWorkoutName";
 import { getAllExercises } from "@/controllers/exercises";
+import { getMuscleGroups } from "@/controllers/musclegroups";
 import { WorkoutTarget } from "@/models/WorkoutTarget";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
@@ -12,6 +13,7 @@ const CreateWorkoutPage = () => {
   const searchParams = usePathname();
   const routineId = searchParams.split("/")[4];
   const exercises = getAllExercises();
+  const muscleGroups = getMuscleGroups();
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [workoutNameIsOpen, setWorkoutNameIsOpen] = useState(false);
@@ -106,6 +108,7 @@ const CreateWorkoutPage = () => {
                 setWorkouts={setWorkouts}
                 workoutList={workouts}
                 setIsOpen={setIsOpen}
+                muscleGroups={muscleGroups}
               />
             )}
           </div>

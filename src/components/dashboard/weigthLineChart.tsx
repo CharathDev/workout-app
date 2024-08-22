@@ -31,13 +31,17 @@ const WeightLineChart = ({ weights }: { weights: any[] }) => {
       y: {
         beginAtZero: true,
       },
+      x: {},
     },
     responsive: true,
     maintainAspectRatio: false,
   };
 
   return (
-    <div className="w-60 md:w-full h-96 xl:h-full xl:p-12 flex justify-center items-center relative">
+    <div
+      style={{ height: "800px" }}
+      className="w-full xl:p-12 flex justify-center items-center relative"
+    >
       <Line data={data} options={options} />
     </div>
   );
