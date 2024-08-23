@@ -8,6 +8,8 @@ import { doc, getDoc } from "firebase/firestore";
 import { PuffLoader } from "react-spinners";
 import { getAllMuscleGroupCount } from "@/controllers/musclegroups";
 import WorkoutDoughnutChart from "@/components/dashboard/musclesWorkedDonutChart";
+import { getTopExercises } from "@/controllers/exercises";
+import TopExercisesChart from "@/components/dashboard/topExercises";
 const DashboardPage = () => {
   const [user, setUser] = useState<User | null>(null);
   const [userName, setUserName] = useState<string | null>(null);
@@ -15,6 +17,7 @@ const DashboardPage = () => {
   const router = useRouter();
 
   const muscleGroups = getAllMuscleGroupCount();
+  const topExercises = getTopExercises();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -42,16 +45,18 @@ const DashboardPage = () => {
   return (
     <div className="bg-neutral-950">
       <main className="md:container mx-auto text-center">
-        {userName && (
-          <h1 className="text-4xl font-bold mb-3">Hi, Admin {userName}</h1>
-        )}
+        {userName && <h1 className="text-4xl font-bold mb-3">Hi, Admin</h1>}
 
-        <div className="bg-neutral-900 rounded-lg grid grid-cols-2">
-          <div className="bg-neutral-800 m-4 rounded-lg">
+        <div className="bg-neutral-900 rounded-lg grid md:grid-cols-2 gird-cols-1">
+          <div className="bg-neutral-800 m-4 rounded-lg flex flex-col justify-center items-center">
             <h2 className="text-2xl font-bold mt-3">Muscle Groups</h2>
             {muscleGroups && (
               <WorkoutDoughnutChart muscleGroups={muscleGroups} />
             )}
+          </div>
+          <div className="bg-neutral-800 m-4 rounded-lg flex flex-col justify-center items-center">
+            <h2 className="text-2xl font-bold mt-3">Top Exercises</h2>
+            {topExercises && <TopExercisesChart exercises={topExercises} />}
           </div>
         </div>
       </main>

@@ -33,9 +33,10 @@ const AddWorkoutNamePage = ({
         minReps: workoutItem.minReps,
         maxReps: workoutItem.maxReps,
         order: i,
+        isWeighted: workoutItem.isWeighted,
       });
     });
-    router.push("../../");
+    router.push(`/user/routines/${routineId}`);
   };
 
   return (

@@ -1,8 +1,10 @@
 "use client";
 
-import { app, firestore } from "@/firebase/firebase";
+import { app, auth, firestore } from "@/firebase/firebase";
 import Exercise from "@/models/Exercise";
+import LogEntry from "@/models/LogEntry";
 import MuscleGroup from "@/models/MuscleGroup";
+import { onAuthStateChanged } from "firebase/auth";
 import {
   collection,
   deleteDoc,
@@ -21,6 +23,7 @@ interface TempExercise {
   name: string;
   muscle_groups: string[]; // Array of muscle group IDs
   gif_url: string;
+  isWeighted: boolean;
 }
 
 export function getAllExercises(): Exercise[] | null {
@@ -122,4 +125,162 @@ export async function deleteExercise(id: string, gif_url: string) {
   const urlRef = storageRef(storage, url);
   deleteObject(urlRef);
   await deleteDoc(doc(firestore, "exercises", id));
+}
+
+interface ExerciseCount {
+  exerciseId: string;
+  name: string;
+  totalSets: number;
+}
+
+async function getTopExercisesForUserAsync(
+  userId: string
+): Promise<ExerciseCount[]> {
+  // Step 1: Get all logs for the current user
+  const logsQuery = query(
+    collection(firestore, "logs"),
+    where("userId", "==", userId)
+  );
+  const logsSnap = await getDocs(logsQuery);
+
+  const logIds = logsSnap.docs.map((logDoc) => logDoc.id);
+
+  // Step 2: Get all log entries that reference these logs
+  const logEntriesQuery = query(
+    collection(firestore, "log_entries"),
+    where("logId", "in", logIds)
+  );
+  const logEntriesSnap = await getDocs(logEntriesQuery);
+
+  const logEntries: LogEntry[] = logEntriesSnap.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  })) as LogEntry[];
+
+  // Step 3: Count sets per exercise
+  const exerciseCountMap: { [key: string]: number } = {};
+
+  logEntries.forEach((logEntry) => {
+    if (exerciseCountMap[logEntry.exerciseId]) {
+      exerciseCountMap[logEntry.exerciseId] += parseInt(
+        logEntry.set.toString()
+      );
+    } else {
+      exerciseCountMap[logEntry.exerciseId] = parseInt(logEntry.set.toString());
+    }
+  });
+
+  // Step 4: Get exercise details (name)
+  const exerciseIds = Object.keys(exerciseCountMap);
+  const exercisesQuery = query(
+    collection(firestore, "exercises"),
+    where("__name__", "in", exerciseIds)
+  );
+  const exercisesSnap = await getDocs(exercisesQuery);
+
+  const exerciseCounts: ExerciseCount[] = exercisesSnap.docs.map((doc) => {
+    const totalSets = exerciseCountMap[doc.id] || 0;
+    return {
+      exerciseId: doc.id,
+      name: doc.data().name as string,
+      totalSets,
+    };
+  });
+
+  // Step 5: Sort exercises by total sets
+  exerciseCounts.sort((a, b) => b.totalSets - a.totalSets);
+
+  return exerciseCounts;
+}
+
+export function getTopExercisesForUser() {
+  const [topExercises, setTopExercises] = useState<ExerciseCount[]>([]);
+
+  useEffect(() => {
+    const unsubscribeAuth = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const counts = await getTopExercisesForUserAsync(user.uid);
+        setTopExercises(counts);
+      }
+    });
+
+    return () => {
+      unsubscribeAuth();
+    };
+  }, []);
+
+  return topExercises;
+}
+
+async function getTopExercisesAsync(): Promise<ExerciseCount[]> {
+  // Step 1: Get all logs for the current user
+  const logsQuery = query(collection(firestore, "logs"));
+  const logsSnap = await getDocs(logsQuery);
+
+  const logIds = logsSnap.docs.map((logDoc) => logDoc.id);
+  console.log(logIds);
+
+  // Step 2: Get all log entries that reference these logs
+  const logEntriesQuery = query(
+    collection(firestore, "log_items"),
+    where("logId", "in", logIds)
+  );
+  const logEntriesSnap = await getDocs(logEntriesQuery);
+
+  const logEntries: LogEntry[] = logEntriesSnap.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  })) as LogEntry[];
+
+  // Step 3: Count sets per exercise
+  const exerciseCountMap: { [key: string]: number } = {};
+
+  logEntries.forEach((logEntry) => {
+    if (exerciseCountMap[logEntry.exerciseId]) {
+      exerciseCountMap[logEntry.exerciseId] += 1;
+    } else {
+      exerciseCountMap[logEntry.exerciseId] = 1;
+    }
+  });
+
+  // Step 4: Get exercise details (name)
+  const exerciseIds = Object.keys(exerciseCountMap);
+  const exercisesQuery = query(
+    collection(firestore, "exercises"),
+    where("__name__", "in", exerciseIds)
+  );
+  const exercisesSnap = await getDocs(exercisesQuery);
+
+  const exerciseCounts: ExerciseCount[] = exercisesSnap.docs.map((doc) => {
+    const totalSets = exerciseCountMap[doc.id] || 0;
+    return {
+      exerciseId: doc.id,
+      name: doc.data().name as string,
+      totalSets,
+    };
+  });
+
+  // Step 5: Sort exercises by total sets
+  exerciseCounts.sort((a, b) => b.totalSets - a.totalSets);
+
+  return exerciseCounts;
+}
+
+export function getTopExercises() {
+  const [topExercises, setTopExercises] = useState<ExerciseCount[]>([]);
+
+  useEffect(() => {
+    const unsubscribeAuth = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const counts = await getTopExercisesAsync();
+        setTopExercises(counts);
+      }
+    });
+
+    return () => {
+      unsubscribeAuth();
+    };
+  }, []);
+
+  return topExercises;
 }

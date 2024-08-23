@@ -61,6 +61,7 @@ const AddExerciseTarget = ({
         minReps: 1,
         maxReps: 1,
         order: 0,
+        isWeighted: id.isWeighted,
       } as WorkoutTarget,
     ]);
     setIsOpen(false);

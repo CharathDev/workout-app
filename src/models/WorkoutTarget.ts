@@ -9,4 +9,5 @@ export interface WorkoutTarget {
   minReps: Number;
   maxReps: Number;
   order: Number;
+  isWeighted: boolean;
 }

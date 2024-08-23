@@ -17,6 +17,7 @@ export default function AddExercise() {
   const [exercise, setExercise] = useState({
     name: "",
     muscle_groups: Array<string>(),
+    isWeighted: true,
   });
 
   const [gif, setGif] = useState<File>();
@@ -54,10 +55,12 @@ export default function AddExercise() {
         name: exercise.name,
         muscle_groups: exercise.muscle_groups,
         gif_url: fileUrl,
+        isWeighted: exercise.isWeighted,
       });
       setExercise({
         name: "",
         muscle_groups: Array<string>(),
+        isWeighted: true,
       });
       setIsOpen(false);
     });
@@ -115,6 +118,33 @@ export default function AddExercise() {
             required
             className="block w-full border-2 rounded-lg cursor-pointer text-gray-300 focus:outline-none bg-neutral-700 border-neutral-600 placeholder-neutral-400 file:bg-neutral-600 file:border-none file:text-gray-300 file:p-2.5 focus:ring-rose-500 focus:border-rose-500"
           />
+        </div>
+        <div className="mb-6">
+          <label
+            htmlFor="name"
+            className="font-medium block mb-2 text-gray-300 text-start"
+          >
+            Is Weighted
+          </label>
+          <div className="relative flex gap-x-3">
+            <div className="flex h-6 items-center">
+              <input
+                id="candidates"
+                name="muscle_groups"
+                type="checkbox"
+                onChange={() =>
+                  setExercise({ ...exercise, isWeighted: !exercise.isWeighted })
+                }
+                checked={exercise.isWeighted}
+                className="h-4 w-4 rounded bg-gray-300 text-rose-600 focus:ring-rose-600"
+              />
+            </div>
+            <div className="text-sm leading-6">
+              <label htmlFor="candidates" className="font-medium text-gray-300">
+                Weighted
+              </label>
+            </div>
+          </div>
         </div>
         <div className="mb-6">
           <label

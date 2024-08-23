@@ -30,8 +30,9 @@ const LogWorkoutPage = () => {
           workoutId: workoutId,
           exerciseId: workoutTarget.exerciseId.toString(),
           set: i + 1,
-          weight: 0,
+          weight: 1,
           reps: 0,
+          isWeighted: workoutTarget.isWeighted,
         };
         logEntries.push(logEntry);
       }
@@ -107,6 +108,7 @@ const LogWorkoutPage = () => {
           weight: logEntry.weight,
           reps: logEntry.reps,
           order: i,
+          isWeighted: logEntry.isWeighted,
         });
       });
 
@@ -150,7 +152,11 @@ const LogWorkoutPage = () => {
                           <h2 className="me-2">Set </h2>
                         </div>
                         <div className="flex justify-center items-center">
-                          <h2 className="me-2">Weight (kg)</h2>
+                          {workoutTarget.isWeighted ? (
+                            <h2 className="me-2">Weight (kg)</h2>
+                          ) : (
+                            <h2></h2>
+                          )}
                         </div>
                         <div className="flex justify-center items-center">
                           <h2 className="me-2">Reps</h2>
@@ -171,19 +177,24 @@ const LogWorkoutPage = () => {
                             <div className="flex justify-center items-center">
                               <h2 className="me-2">{set + 1}</h2>
                             </div>
-                            <div className="flex justify-center items-center">
-                              <input
-                                type="number"
-                                className="border-2 outline-none sm:text-sm rounded-lg focus:ring-rose-500 focus:border-rose-500 block w-16 p-2.5 bg-neutral-700 border-neutral-600 placeholder-neutral-500 text-white"
-                                name="minReps"
-                                onChange={(e) =>
-                                  onWeightChangeHandler(e, targetIndex)
-                                }
-                                value={parseInt(
-                                  log[targetIndex].weight.toString()
-                                )}
-                              />
-                            </div>
+                            {log[targetIndex].isWeighted ? (
+                              <div className="flex justify-center items-center">
+                                <input
+                                  type="number"
+                                  className="border-2 outline-none sm:text-sm rounded-lg focus:ring-rose-500 focus:border-rose-500 block w-16 p-2.5 bg-neutral-700 border-neutral-600 placeholder-neutral-500 text-white"
+                                  name="minReps"
+                                  onChange={(e) =>
+                                    onWeightChangeHandler(e, targetIndex)
+                                  }
+                                  value={parseInt(
+                                    log[targetIndex].weight.toString()
+                                  )}
+                                />
+                              </div>
+                            ) : (
+                              <div></div>
+                            )}
+
                             <div className="flex justify-center items-center">
                               <input
                                 type="number"

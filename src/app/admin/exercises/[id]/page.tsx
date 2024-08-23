@@ -5,6 +5,7 @@ import { deleteExercise, getExerciseById } from "@/controllers/exercises";
 import { getMuscleGroups } from "@/controllers/musclegroups";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
+import { IoIosArrowRoundBack } from "react-icons/io";
 import { PuffLoader } from "react-spinners";
 
 const ExerciseInfoPage = () => {
@@ -22,7 +23,16 @@ const ExerciseInfoPage = () => {
     <div className="bg-neutral-950">
       {exercise ? (
         <main className="md:cotainer mx-6 text-center">
-          <h1 className="text-4xl font-bold mb-10">{exercise.name}</h1>
+          <div className="flex justify-between items-center mb-10">
+            <button
+              className="rounded-full bg-neutral-950 hover:bg-neutral-900 p-2"
+              onClick={() => router.push(`/admin/exercises`)}
+            >
+              <IoIosArrowRoundBack size={32} />
+            </button>
+            <h1 className="text-4xl font-bold">Create Workout</h1>
+            <div></div>
+          </div>
 
           <div className="bg-neutral-900 rounded-lg p-5 my-2 flex flex-col justify-center items-center shadow-lg mb-6">
             <div className="rounded-2xl">
@@ -42,6 +52,13 @@ const ExerciseInfoPage = () => {
                   <li>{muscle_group.name}</li>
                 ))}
               </ul>
+            </div>
+
+            <div className="text-center my-3">
+              <h4 className="text-lg">
+                Exercise Type:{" "}
+                {exercise.isWeighted ? "Weighted" : "Calisthenics"}
+              </h4>
             </div>
 
             <div className="my-3 flex">

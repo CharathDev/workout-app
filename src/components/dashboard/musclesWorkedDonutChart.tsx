@@ -71,7 +71,7 @@ const WorkoutDoughnutChart = ({
   return (
     <div
       style={{ height: "800px" }}
-      className="w-full xl:p-6 flex justify-center items-center relative bg-"
+      className="w-[90%] xl:p-6 flex justify-center items-center relative"
     >
       <Doughnut data={data} options={options} />
     </div>

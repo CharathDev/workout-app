@@ -5,4 +5,5 @@ export default interface Exercise {
   name: string;
   muscle_groups: MuscleGroup[];
   gif_url: string;
+  isWeighted: boolean;
 }

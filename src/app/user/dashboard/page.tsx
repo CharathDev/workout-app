@@ -84,7 +84,7 @@ const DashboardPage = () => {
               <div className="xl:grid grid-cols-2">
                 <div className="md:p-5 p-2 xl:flex hidden flex-col justify-center items-center mb-5">
                   <h2 className="text-xl mb-2 font-bold">Workouts</h2>
-                  {logs && <HeatmapCalender logs={logs} weeksToShow={28} />}
+                  {logs && <HeatmapCalender logs={logs} weeksToShow={27} />}
                 </div>
                 <div className="flex flex-col mb-4">
                   <div className="">

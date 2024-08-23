@@ -6,4 +6,5 @@ export default interface LogEntry {
   set: Number;
   weight: Number;
   reps: Number;
+  isWeighted: boolean;
 }
