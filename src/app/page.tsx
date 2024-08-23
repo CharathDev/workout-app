@@ -16,24 +16,10 @@ export default function HomePage() {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         const userDoc = await getDoc(doc(firestore, "users", user.uid));
-        if (!userDoc.exists()) {
-          // Retriece user data from local storage
-          const registrationData = localStorage.getItem("registrationData");
-          const { firstName = "", lastName = "" } = registrationData
-            ? JSON.parse(registrationData)
-            : {};
-
-          await setDoc(doc(firestore, "users", user.uid), {
-            firstName,
-            lastName,
-            email: user.email,
-          });
-
-          // Clear registration data from local storage
-          localStorage.removeItem("registrationData");
-        }
         setUser(user);
-        router.push("/dashboard");
+        userDoc.data()!.isAdmin
+          ? router.push("/admin/dashboard")
+          : router.push("/user/dashboard");
       } else {
         setUser(null);
         router.push("/login");

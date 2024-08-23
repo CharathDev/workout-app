@@ -59,7 +59,7 @@ const DashboardPage = () => {
 
     // Cleanup subscription on unmount
     return () => unsubscribe();
-  }, [router]);
+  }, [router, reset]);
 
   if (loading) {
     return <PuffLoader />;

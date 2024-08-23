@@ -2,9 +2,42 @@
 import AddExercise from "@/components/forms/exercise/AddExercise";
 import { getAllExercises } from "@/controllers/exercises";
 import ExerciseItem from "./ExerciseItem";
+import { useState } from "react";
+import { getMuscleGroups } from "@/controllers/musclegroups";
 
 const ExercisesPage = () => {
   const exercises = getAllExercises();
+  const muscleGroups = getMuscleGroups();
+
+  const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState("");
+  const searchedExercises = () => {
+    if (filter != "" && search == "") {
+      return exercises?.filter((exercise) => {
+        return (
+          exercise.muscle_groups.find(
+            (muscle_group) => muscle_group.id == filter
+          ) != null
+        );
+      });
+    } else if (filter == "" && search != "") {
+      return exercises?.filter((exercise) => {
+        return exercise.name.toLowerCase().includes(search);
+      });
+    } else if (filter != "" && search != "") {
+      return exercises?.filter((exercise) => {
+        return (
+          exercise.name.toLowerCase().includes(search) &&
+          exercise.muscle_groups.find(
+            (muscle_group) => muscle_group.id == filter
+          ) != null
+        );
+      });
+    }
+
+    return exercises;
+  };
+
   return (
     <div className="bg-neutral-950 flex justify-center">
       <main className="md:container mx-6 text-center">
@@ -13,9 +46,45 @@ const ExercisesPage = () => {
         <AddExercise />
 
         <div className="bg-neutral-900 rounded-lg p-5 my-2 flex flex-col justify-center items-center shadow-lg mb-6">
-          <div className="grid grid-cols-4 gap-4">
+          <div className="w-full flex justify-between mb-3">
+            <div className="">
+              <label
+                htmlFor="name"
+                className="font-medium block mb-2 text-gray-300 text-start"
+              >
+                Search By Name
+              </label>
+              <input
+                type="text"
+                name="name"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                required
+                className="border-2 outline-none sm:text-sm rounded-lg focus:ring-rose-500 focus:border-rose-500 block w-96 p-2.5 bg-neutral-700 border-neutral-600 placeholder-neutral-500 text-white"
+              />
+            </div>
+            <div className="">
+              <label
+                htmlFor="name"
+                className="font-medium block mb-2 text-gray-300 text-start"
+              >
+                Filter
+              </label>
+              <select
+                onChange={(e) => setFilter(e.target.value)}
+                value={filter}
+                className="border-2 outline-none sm:text-sm rounded-lg focus:ring-rose-500 focus:border-rose-500 block w-full p-2.5 bg-neutral-700 border-neutral-600 placeholder-neutral-500 text-white"
+              >
+                <option value={""}>All</option>
+                {muscleGroups.map((muscleGroup) => (
+                  <option value={muscleGroup.id}>{muscleGroup.name}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className="w-full grid grid-cols-4 gap-4">
             {exercises &&
-              exercises.map((exercise, i) => (
+              searchedExercises()!.map((exercise, i) => (
                 <ExerciseItem exercise={exercise} key={i} />
               ))}
           </div>

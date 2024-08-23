@@ -4,7 +4,10 @@ import Link from "next/link";
 const ExerciseItem = ({ exercise }: { exercise: Exercise }) => {
   return (
     <Link href={`/admin/exercises/${exercise.id}`}>
-      <div className="bg-rose-500 hover:bg-rose-600 font-bold text-neutral-900 p-5 rounded-md">
+      <div
+        className="bg-neutral-800 hover:ring-2 hover:ring-rose-500 text-grey-300 p-5 rounded-md tooltip"
+        data-title="View More"
+      >
         <h2>{exercise.name}</h2>
       </div>
     </Link>

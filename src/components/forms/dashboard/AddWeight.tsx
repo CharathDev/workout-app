@@ -25,6 +25,7 @@ const AddWeightForm = ({
     await updateDoc(doc(firestore, "users", userId), {
       weights: weights,
     });
+    setReset(true);
   };
 
   return (
