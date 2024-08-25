@@ -42,6 +42,13 @@ const CreateWorkoutPage = () => {
     setWorkouts(updatedWorkouts);
   };
 
+  const removeWorkout = (e: any, index: number) => {
+    const updatedWorkouts: WorkoutTarget[] = workouts.filter(
+      (workout, i) => i != index
+    );
+    setWorkouts(updatedWorkouts);
+  };
+
   return (
     <div className="bg-neutral-950 flex justify-center items-center">
       <main className="md:container mx-6 text-center">
@@ -58,7 +65,7 @@ const CreateWorkoutPage = () => {
 
         <div className="bg-neutral-900 p-3 rounded-md">
           {workouts.map((workoutTarget, i) => (
-            <div className="bg-neutral-800 p-3 rounded-md mb-6 grid grid-cols-4">
+            <div className="bg-neutral-800 p-3 rounded-md mb-6 grid grid-cols-5">
               <div className="flex justify-center items-center">
                 <h2 className="mx-2">{workoutTarget.exerciseId.name}</h2>
               </div>
@@ -91,6 +98,14 @@ const CreateWorkoutPage = () => {
                   value={workoutTarget.maxReps.toString()}
                   onChange={(e) => onChangeHandler(e, i)}
                 />
+              </div>
+              <div className="">
+                <button
+                  className="px-4 p-2 bg-rose-500 hover:bg-rose-600 rounded-md text-neutral-950 font-bold"
+                  onClick={(e) => removeWorkout(e, i)}
+                >
+                  Remove
+                </button>
               </div>
             </div>
           ))}

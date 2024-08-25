@@ -7,6 +7,7 @@ import {
 } from "firebase/auth";
 import { auth, firestore } from "@/firebase/firebase";
 import { doc, setDoc } from "firebase/firestore";
+import Link from "next/link";
 
 const RegisterPage = () => {
   const [user, setUser] = useState({
@@ -69,9 +70,9 @@ const RegisterPage = () => {
     setUser({ ...user, [e.target.name]: e.target.value });
 
   return (
-    <div className="bg-gradient-to-b from-gray-600 to-black justify-center items-center h-screen w-screen flex flex-col relative">
-      <h2 className="text-2xl font-bold text-center mb-10">Register</h2>
-      <div className="p-5 border border-gray-300 rounded">
+    <div className="justify-center items-center h-screen w-screen flex flex-col relative bg-neutral-950">
+      <h2 className="text-4xl font-medium text-white mb-10">Register</h2>
+      <div className="p-5 bg-neutral-900 rounded-lg">
         <form onSubmit={handleRegister} className="space-y-6 px-6 pb-6">
           <div className="flex space-x-4">
             <div className="w-1/2">
@@ -87,7 +88,7 @@ const RegisterPage = () => {
                 value={user.firstName}
                 onChange={onChangeHandler}
                 required
-                className="border-2 outline-none sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-gray-600 border-gray-500 placeholder-gray-400 text-white"
+                className="border-2 outline-none sm:text-sm rounded-lg focus:ring-rose-500 focus:border-rose-500 block w-full p-2.5 bg-neutral-700 border-neutral-600 placeholder-neutral-500 text-white"
               />
             </div>
             <div className="w-1/2">
@@ -103,7 +104,7 @@ const RegisterPage = () => {
                 value={user.lastName}
                 onChange={onChangeHandler}
                 required
-                className="border-2 outline-none sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-gray-600 border-gray-500 placeholder-gray-400 text-white"
+                className="border-2 outline-none sm:text-sm rounded-lg focus:ring-rose-500 focus:border-rose-500 block w-full p-2.5 bg-neutral-700 border-neutral-600 placeholder-neutral-500 text-white"
               />
             </div>
           </div>
@@ -120,7 +121,7 @@ const RegisterPage = () => {
               value={user.email}
               onChange={onChangeHandler}
               required
-              className="border-2 outline-none sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-gray-600 border-gray-500 placeholder-gray-400 text-white"
+              className="border-2 outline-none sm:text-sm rounded-lg focus:ring-rose-500 focus:border-rose-500 block w-full p-2.5 bg-neutral-700 border-neutral-600 placeholder-neutral-500 text-white"
             />
           </div>
           <div className="flex space-x-4">
@@ -137,7 +138,7 @@ const RegisterPage = () => {
                 value={user.password}
                 onChange={onChangeHandler}
                 required
-                className="border-2 outline-none sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-gray-600 border-gray-500 placeholder-gray-400 text-white"
+                className="border-2 outline-none sm:text-sm rounded-lg focus:ring-rose-500 focus:border-rose-500 block w-full p-2.5 bg-neutral-700 border-neutral-600 placeholder-neutral-500 text-white"
               />
             </div>
             <div>
@@ -153,7 +154,7 @@ const RegisterPage = () => {
                 value={user.confirmPassword}
                 onChange={onChangeHandler}
                 required
-                className="border-2 outline-none sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-gray-600 border-gray-500 placeholder-gray-400 text-white"
+                className="border-2 outline-none sm:text-sm rounded-lg focus:ring-rose-500 focus:border-rose-500 block w-full p-2.5 bg-neutral-700 border-neutral-600 placeholder-neutral-500 text-white"
               />
             </div>
           </div>
@@ -161,11 +162,17 @@ const RegisterPage = () => {
           {message && <p className="text-green-500 text-sm">{message}</p>}
           <button
             type="submit"
-            className="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            className="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-rose-600 hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose-500"
           >
             Sign Up
           </button>
         </form>
+        <p className="text-sm font-medium text-gray-300 space-y-6 px-6 pb-4">
+          Already have an account?{" "}
+          <Link href={"/login"} className="text-rose-700 hover:underline">
+            Login
+          </Link>
+        </p>
       </div>
     </div>
   );

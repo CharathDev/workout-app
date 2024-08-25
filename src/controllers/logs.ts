@@ -10,6 +10,8 @@ import {
   getDocs,
   getDoc,
   doc,
+  orderBy,
+  limit,
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
@@ -79,3 +81,74 @@ export const getLogsByUser = (): Log[] | null => {
 
   return logs;
 };
+
+async function getMostRecentLogForCurrentWorkout(
+  workoutId: string,
+  userId: string
+): Promise<Log | null> {
+  // Step 1: Query the most recent log for the current workout and user, sorted by timestamp
+  const logsQuery = query(
+    collection(firestore, "logs"),
+    where("workoutId", "==", workoutId),
+    where("userId", "==", userId),
+    orderBy("date", "desc"),
+    limit(1) // Only get the most recent log
+  );
+
+  const logsSnap = await getDocs(logsQuery);
+
+  // Step 2: Check if a log is found and return it
+  if (!logsSnap.empty) {
+    const doc = logsSnap.docs[0];
+    return {
+      id: doc.id,
+      ...doc.data(),
+      date: doc.data().timestamp.toDate(), // Convert Firestore timestamp to JS Date
+    } as Log;
+  } else {
+    return null;
+  }
+}
+
+async function getLogEntriesForLog(logId: string): Promise<LogEntry[]> {
+  // Query log entries associated with the most recent log
+  const logEntriesQuery = query(
+    collection(firestore, "log_items"),
+    where("logId", "==", logId),
+    orderBy("set", "asc") // Optionally order by the set number
+  );
+
+  const logEntriesSnap = await getDocs(logEntriesQuery);
+
+  const logEntries: LogEntry[] = logEntriesSnap.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  })) as LogEntry[];
+
+  return logEntries;
+}
+
+export function getMostRecentLogs(workoutId: string) {
+  const [logEntries, setLogEntries] = useState<LogEntry[]>([]);
+
+  useEffect(() => {
+    const unsubscribeAuth = onAuthStateChanged(auth, async (user) => {
+      if (user && workoutId) {
+        const mostRecentLog = await getMostRecentLogForCurrentWorkout(
+          workoutId,
+          user.uid
+        );
+        if (mostRecentLog) {
+          const entries = await getLogEntriesForLog(mostRecentLog.id);
+          setLogEntries(entries);
+        }
+      }
+    });
+
+    return () => {
+      unsubscribeAuth();
+    };
+  }, [workoutId]);
+
+  return logEntries;
+}

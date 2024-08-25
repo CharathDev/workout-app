@@ -10,12 +10,14 @@ import { addDoc, collection, doc, getDoc } from "firebase/firestore";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import ExerciseInfoModal from "./ExerciseInfoModal";
+import { getMostRecentLogs } from "@/controllers/logs";
 
 const LogWorkoutPage = () => {
   const searchParams = usePathname();
   const workoutId = searchParams.split("/")[3];
   const workoutInfo = getWorkoutById(workoutId);
   const workoutTargetInfo = getWorkoutItemsById(workoutId);
+  const getPastLogInfo = getMostRecentLogs(workoutId);
   const [user, setUser] = useState<User | null>(null);
   const generateLogEntries = (
     workoutTargetInfo: WorkoutTarget[],
@@ -116,8 +118,6 @@ const LogWorkoutPage = () => {
     }
   };
 
-  console.log(log);
-
   return (
     <div className="bg-neutral-950">
       {workoutInfo && workoutTargetInfo && log.length > 0 && (
@@ -147,7 +147,10 @@ const LogWorkoutPage = () => {
                       </div>
                     </div>
                     <div className="pt-3">
-                      <div className="grid grid-cols-3 mb-3 text-neutral-500">
+                      <div className="grid grid-cols-4 mb-3 text-neutral-500">
+                        <div className="flex justify-center items-center">
+                          <h2 className="me-2">Last </h2>
+                        </div>
                         <div className="flex justify-center items-center">
                           <h2 className="me-2">Set </h2>
                         </div>
@@ -171,11 +174,18 @@ const LogWorkoutPage = () => {
                           }, 0) + set;
                         return (
                           <div
-                            className="grid grid-cols-3 my-2"
+                            className="grid grid-cols-4 my-2"
                             key={targetIndex}
                           >
                             <div className="flex justify-center items-center">
                               <h2 className="me-2">{set + 1}</h2>
+                            </div>
+                            <div className="flex justify-center items-center">
+                              <h2 className="me-2 text-neutral-400">
+                                {getPastLogInfo.length != 0
+                                  ? `${getPastLogInfo[targetIndex].weight}kg * ${getPastLogInfo[targetIndex].reps}`
+                                  : "--"}
+                              </h2>
                             </div>
                             {log[targetIndex].isWeighted ? (
                               <div className="flex justify-center items-center">
