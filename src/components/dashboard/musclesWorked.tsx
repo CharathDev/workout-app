@@ -1,8 +1,8 @@
 "use client";
 
 import {
-  getMuscleGroupCount,
-  getMuscleGroups,
+  useGetMuscleGroupCount,
+  useGetMuscleGroups,
 } from "@/controllers/musclegroups";
 
 interface MuscleGroupCount {
@@ -12,7 +12,7 @@ interface MuscleGroupCount {
 }
 
 const MusclesWorked = () => {
-  const muscleGroups = getMuscleGroupCount();
+  const muscleGroups = useGetMuscleGroupCount();
   const colorList = [
     "fill-rose-400",
     "fill-rose-500",

@@ -14,7 +14,7 @@ const ExerciseInfoPage = () => {
   const exercise = useGetExerciseById(exerciseId);
   const router = useRouter();
 
-  const onDeleteHandler = (e: any) => {
+  const useDeleteHandler = (e: any) => {
     useDeleteExercise(exercise!.id, exercise!.gif_url);
     router.push("/admin/exercises");
   };
@@ -65,7 +65,7 @@ const ExerciseInfoPage = () => {
               <EditExercise exerciseInfo={exercise} />
               <button
                 className="bg-rose-500 hover:bg-rose-600 text-neutral-900 rounded-md font-bold p-3 mx-2"
-                onClick={onDeleteHandler}
+                onClick={useDeleteHandler}
               >
                 Delete
               </button>

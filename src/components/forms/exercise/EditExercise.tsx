@@ -1,6 +1,6 @@
 "use client";
 
-import { getMuscleGroups } from "@/controllers/musclegroups";
+import { useGetMuscleGroups } from "@/controllers/musclegroups";
 import { app, firestore } from "@/firebase/firebase";
 import Exercise from "@/models/Exercise";
 import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
@@ -11,7 +11,7 @@ import { ChangeEvent, useState } from "react";
 const EditExercise = ({ exerciseInfo }: { exerciseInfo: Exercise }) => {
   const storage = getStorage(app);
   const [isOpen, setIsOpen] = useState(false);
-  const muscle_groups = getMuscleGroups();
+  const muscle_groups = useGetMuscleGroups();
   const [gif, setGif] = useState<File>();
   const [exercise, setExercise] = useState({
     name: exerciseInfo.name,

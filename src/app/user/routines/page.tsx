@@ -20,9 +20,7 @@ const RoutinesPage = () => {
     return () => unsubscribe();
   }, [router]);
 
-  const routines = currentUser
-    ? useGetAllRoutines(currentUser.uid)
-    : useGetAllRoutines("");
+  const routines = useGetAllRoutines(currentUser ? currentUser.uid : "");
 
   return (
     <div className="bg-neutral-950 flex justify-center">
