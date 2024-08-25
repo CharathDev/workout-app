@@ -1,13 +1,13 @@
 "use client";
 import AddExercise from "@/components/forms/exercise/AddExercise";
-import { getAllExercises } from "@/controllers/exercises";
+import { useGetAllExercises } from "@/controllers/exercises";
 import ExerciseItem from "./ExerciseItem";
 import { useState } from "react";
-import { getMuscleGroups } from "@/controllers/musclegroups";
+import { useGetMuscleGroups } from "@/controllers/musclegroups";
 
 const ExercisesPage = () => {
-  const exercises = getAllExercises();
-  const muscleGroups = getMuscleGroups();
+  const exercises = useGetAllExercises();
+  const muscleGroups = useGetMuscleGroups();
 
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("");
@@ -76,8 +76,10 @@ const ExercisesPage = () => {
                 className="border-2 outline-none sm:text-sm rounded-lg focus:ring-rose-500 focus:border-rose-500 block w-full p-2.5 bg-neutral-700 border-neutral-600 placeholder-neutral-500 text-white"
               >
                 <option value={""}>All</option>
-                {muscleGroups.map((muscleGroup) => (
-                  <option value={muscleGroup.id}>{muscleGroup.name}</option>
+                {muscleGroups.map((muscleGroup, i) => (
+                  <option value={muscleGroup.id} key={i}>
+                    {muscleGroup.name}
+                  </option>
                 ))}
               </select>
             </div>

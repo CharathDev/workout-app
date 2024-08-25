@@ -7,10 +7,10 @@ import type { User } from "firebase/auth";
 import { doc, DocumentData, getDoc } from "firebase/firestore";
 import { PuffLoader } from "react-spinners";
 import Log from "@/models/Log";
-import { getLogsByUser } from "@/controllers/logs";
+import { useGetLogsByUser } from "@/controllers/logs";
 import HeatmapCalender from "@/components/dashboard/heatmapCalender";
 import MusclesWorked from "@/components/dashboard/musclesWorked";
-import { getTotalVolumeForUser } from "@/controllers/musclegroups";
+import { useGetTotalVolumeForUser } from "@/controllers/musclegroups";
 import AddWeightForm from "@/components/forms/dashboard/AddWeight";
 import WeightLineChart from "@/components/dashboard/weigthLineChart";
 
@@ -20,8 +20,8 @@ const DashboardPage = () => {
   const [userInfo, setUserInfo] = useState<DocumentData | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const logs = getLogsByUser();
-  const totalVolume = getTotalVolumeForUser();
+  const logs = useGetLogsByUser();
+  const totalVolume = useGetTotalVolumeForUser();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {

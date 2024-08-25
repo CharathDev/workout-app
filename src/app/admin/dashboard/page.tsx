@@ -6,9 +6,9 @@ import { auth, firestore } from "@/firebase/firebase";
 import type { User } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { PuffLoader } from "react-spinners";
-import { getAllMuscleGroupCount } from "@/controllers/musclegroups";
+import { useGetAllMuscleGroupCount } from "@/controllers/musclegroups";
 import WorkoutDoughnutChart from "@/components/dashboard/musclesWorkedDonutChart";
-import { getTopExercises } from "@/controllers/exercises";
+import { useGetTopExercises } from "@/controllers/exercises";
 import TopExercisesChart from "@/components/dashboard/topExercises";
 const DashboardPage = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -16,8 +16,8 @@ const DashboardPage = () => {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  const muscleGroups = getAllMuscleGroupCount();
-  const topExercises = getTopExercises();
+  const muscleGroups = useGetAllMuscleGroupCount();
+  const topExercises = useGetTopExercises();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {

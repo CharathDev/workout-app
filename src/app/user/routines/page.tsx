@@ -1,7 +1,7 @@
 "use client";
 
 import AddRoutine from "@/components/forms/routine/AddRoutine";
-import { getAllRoutines } from "@/controllers/routines";
+import { useGetAllRoutines } from "@/controllers/routines";
 import { auth } from "@/firebase/firebase";
 import { onAuthStateChanged, User } from "firebase/auth";
 import Link from "next/link";
@@ -21,8 +21,8 @@ const RoutinesPage = () => {
   }, [router]);
 
   const routines = currentUser
-    ? getAllRoutines(currentUser.uid)
-    : getAllRoutines("");
+    ? useGetAllRoutines(currentUser.uid)
+    : useGetAllRoutines("");
 
   return (
     <div className="bg-neutral-950 flex justify-center">
@@ -33,8 +33,8 @@ const RoutinesPage = () => {
 
         {routines ? (
           <div className="bg-neutral-900 p-5 rounded-md">
-            {routines.map((routine) => (
-              <Link href={`/user/routines/${routine.id}`}>
+            {routines.map((routine, i) => (
+              <Link href={`/user/routines/${routine.id}`} key={i}>
                 <div className="bg-neutral-800 p-5 cursor-pointer rounded-md flex justify-between my-4 hover:bg-neutral-700">
                   <div className="flex justify-center items-center">
                     <h4 className="text-center">{routine.name}</h4>

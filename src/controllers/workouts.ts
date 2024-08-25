@@ -5,7 +5,7 @@ import { Workout } from "@/models/Workout";
 import { doc, onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
-export const getWorkoutById = (id: string): Workout | null => {
+export const useGetWorkoutById = (id: string): Workout | null => {
   const [workout, setWorkout] = useState<Workout | null>(null);
 
   useEffect(() => {

@@ -136,8 +136,10 @@ const AddExerciseTarget = ({
                     className="border-2 outline-none sm:text-sm rounded-lg focus:ring-rose-500 focus:border-rose-500 block w-full p-2.5 bg-neutral-700 border-neutral-600 placeholder-neutral-500 text-white"
                   >
                     <option value={""}>All</option>
-                    {muscleGroups.map((muscleGroup) => (
-                      <option value={muscleGroup.id}>{muscleGroup.name}</option>
+                    {muscleGroups.map((muscleGroup, i) => (
+                      <option value={muscleGroup.id} key={i}>
+                        {muscleGroup.name}
+                      </option>
                     ))}
                   </select>
                 </div>

@@ -2,8 +2,8 @@
 
 import AddExerciseTarget from "@/components/forms/workout/AddExerciseTarget";
 import AddWorkoutNamePage from "@/components/forms/workout/AddWorkoutName";
-import { getAllExercises } from "@/controllers/exercises";
-import { getMuscleGroups } from "@/controllers/musclegroups";
+import { useGetAllExercises } from "@/controllers/exercises";
+import { useGetMuscleGroups } from "@/controllers/musclegroups";
 import { WorkoutTarget } from "@/models/WorkoutTarget";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
@@ -12,8 +12,8 @@ import { IoIosArrowRoundBack } from "react-icons/io";
 const CreateWorkoutPage = () => {
   const searchParams = usePathname();
   const routineId = searchParams.split("/")[4];
-  const exercises = getAllExercises();
-  const muscleGroups = getMuscleGroups();
+  const exercises = useGetAllExercises();
+  const muscleGroups = useGetMuscleGroups();
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [workoutNameIsOpen, setWorkoutNameIsOpen] = useState(false);
@@ -65,7 +65,10 @@ const CreateWorkoutPage = () => {
 
         <div className="bg-neutral-900 p-3 rounded-md">
           {workouts.map((workoutTarget, i) => (
-            <div className="bg-neutral-800 p-3 rounded-md mb-6 grid grid-cols-5">
+            <div
+              className="bg-neutral-800 p-3 rounded-md mb-6 grid grid-cols-5"
+              key={i}
+            >
               <div className="flex justify-center items-center">
                 <h2 className="mx-2">{workoutTarget.exerciseId.name}</h2>
               </div>

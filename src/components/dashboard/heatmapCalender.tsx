@@ -58,8 +58,11 @@ const HeatmapCalender = ({
     <div className="flex flex-col w-full justify-center items-center xl:items-end">
       <div className="flex flex-col justify-center items-end">
         <div className="grid grid-flow-col gap-1">
-          {monthsArray.map((month) => (
-            <h4 className="md:text-xs text-xs text-neutral-400 md:w-4 w-2">
+          {monthsArray.map((month, i) => (
+            <h4
+              className="md:text-xs text-xs text-neutral-400 md:w-4 w-2"
+              key={i}
+            >
               {month}
             </h4>
           ))}
@@ -75,7 +78,6 @@ const HeatmapCalender = ({
               const currentLog = logs.find((log) => {
                 return new Date(log.date).toISOString().slice(0, 10) == day;
               });
-              console.log(day);
               return (
                 <div
                   className={`md:w-4 md:h-4 w-2 h-2 md:rounded rounded-sm tooltip ${
@@ -86,6 +88,7 @@ const HeatmapCalender = ({
                   data-title={`${day} ${
                     currentLog ? `You logged ${currentLog.workoutName}` : ""
                   }`}
+                  key={index}
                 ></div>
               );
             })}

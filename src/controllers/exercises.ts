@@ -26,7 +26,7 @@ interface TempExercise {
   isWeighted: boolean;
 }
 
-export function getAllExercises(): Exercise[] | null {
+export function useGetAllExercises(): Exercise[] | null {
   const [exercises, setExercises] = useState<Exercise[] | null>(null);
 
   useEffect(() => {
@@ -83,7 +83,7 @@ export function getAllExercises(): Exercise[] | null {
   return exercises;
 }
 
-export function getExerciseById(id: string): Exercise | null {
+export function useGetExerciseById(id: string): Exercise | null {
   const [exercise, setExercise] = useState<Exercise | null>(null);
 
   useEffect(() => {
@@ -118,7 +118,7 @@ export function getExerciseById(id: string): Exercise | null {
   return exercise;
 }
 
-export async function deleteExercise(id: string, gif_url: string) {
+export async function useDeleteExercise(id: string, gif_url: string) {
   const names = gif_url.split("/");
   const url = names[names.length - 1];
   const storage = getStorage(app);
@@ -193,7 +193,7 @@ async function getTopExercisesForUserAsync(
   return exerciseCounts;
 }
 
-export function getTopExercisesForUser() {
+export function useGetTopExercisesForUser() {
   const [topExercises, setTopExercises] = useState<ExerciseCount[]>([]);
 
   useEffect(() => {
@@ -266,7 +266,7 @@ async function getTopExercisesAsync(): Promise<ExerciseCount[]> {
   return exerciseCounts;
 }
 
-export function getTopExercises() {
+export function useGetTopExercises() {
   const [topExercises, setTopExercises] = useState<ExerciseCount[]>([]);
 
   useEffect(() => {

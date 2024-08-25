@@ -11,7 +11,7 @@ interface tempRoutine {
   name: string;
 }
 
-export function getAllRoutines(userId: string): Routine[] | null {
+export function useGetAllRoutines(userId: string): Routine[] | null {
   const [routines, setRoutines] = useState<Routine[] | null>(null);
 
   useEffect(() => {
@@ -80,7 +80,7 @@ export function getAllRoutines(userId: string): Routine[] | null {
   return routines;
 }
 
-export function getRoutineById(routineId: string): Routine | null {
+export function useGetRoutineById(routineId: string): Routine | null {
   const [routine, setRoutine] = useState<Routine | null>(null);
 
   useEffect(() => {

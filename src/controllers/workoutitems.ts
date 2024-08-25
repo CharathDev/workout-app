@@ -3,7 +3,7 @@ import { WorkoutTarget } from "@/models/WorkoutTarget";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
-export const getWorkoutItemsById = (id: string): WorkoutTarget[] | null => {
+export const useGetWorkoutItemsById = (id: string): WorkoutTarget[] | null => {
   const [workoutTargets, setWorkoutTargets] = useState<WorkoutTarget[] | null>(
     null
   );

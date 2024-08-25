@@ -20,7 +20,7 @@ async function fetchWorkoutName(workoutId: string): Promise<string> {
   return workoutDoc.exists() ? workoutDoc.data()?.name ?? null : null;
 }
 
-export const getLogsByUser = (): Log[] | null => {
+export const useGetLogsByUser = (): Log[] | null => {
   const [logs, setLogs] = useState<Log[] | null>(null);
 
   useEffect(() => {
@@ -128,7 +128,7 @@ async function getLogEntriesForLog(logId: string): Promise<LogEntry[]> {
   return logEntries;
 }
 
-export function getMostRecentLogs(workoutId: string) {
+export function useGetMostRecentLogs(workoutId: string) {
   const [logEntries, setLogEntries] = useState<LogEntry[]>([]);
 
   useEffect(() => {

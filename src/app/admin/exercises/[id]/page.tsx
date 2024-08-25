@@ -1,8 +1,8 @@
 "use client";
 
 import EditExercise from "@/components/forms/exercise/EditExercise";
-import { deleteExercise, getExerciseById } from "@/controllers/exercises";
-import { getMuscleGroups } from "@/controllers/musclegroups";
+import { useDeleteExercise, useGetExerciseById } from "@/controllers/exercises";
+import { useGetMuscleGroups } from "@/controllers/musclegroups";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { IoIosArrowRoundBack } from "react-icons/io";
@@ -11,11 +11,11 @@ import { PuffLoader } from "react-spinners";
 const ExerciseInfoPage = () => {
   const searchParams = usePathname();
   const exerciseId = searchParams.split("/")[3];
-  const exercise = getExerciseById(exerciseId);
+  const exercise = useGetExerciseById(exerciseId);
   const router = useRouter();
 
   const onDeleteHandler = (e: any) => {
-    deleteExercise(exercise!.id, exercise!.gif_url);
+    useDeleteExercise(exercise!.id, exercise!.gif_url);
     router.push("/admin/exercises");
   };
 
@@ -48,8 +48,8 @@ const ExerciseInfoPage = () => {
             <div className="text-center my-3">
               <h4 className="text-lg">Muscle Groups: </h4>
               <ul>
-                {exercise.muscle_groups.map((muscle_group) => (
-                  <li>{muscle_group.name}</li>
+                {exercise.muscle_groups.map((muscle_group, i) => (
+                  <li key={i}>{muscle_group.name}</li>
                 ))}
               </ul>
             </div>

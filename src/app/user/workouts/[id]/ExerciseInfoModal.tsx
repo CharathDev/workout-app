@@ -1,13 +1,13 @@
 "use client";
 
-import { getExerciseById } from "@/controllers/exercises";
+import { useGetExerciseById } from "@/controllers/exercises";
 import Exercise from "@/models/Exercise";
 import Image from "next/image";
 import { useState } from "react";
 
 const ExerciseInfoModal = ({ exerciseId }: { exerciseId: string }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const exercise = getExerciseById(exerciseId);
+  const exercise = useGetExerciseById(exerciseId);
 
   return (
     <>
@@ -37,8 +37,8 @@ const ExerciseInfoModal = ({ exerciseId }: { exerciseId: string }) => {
                     <div className="text-center my-3">
                       <h4 className="text-lg">Muscle Groups: </h4>
                       <ul>
-                        {exercise.muscle_groups.map((muscle_group) => (
-                          <li>{muscle_group.name}</li>
+                        {exercise.muscle_groups.map((muscle_group, i) => (
+                          <li key={i}>{muscle_group.name}</li>
                         ))}
                       </ul>
                     </div>

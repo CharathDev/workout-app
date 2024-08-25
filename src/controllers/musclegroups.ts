@@ -14,7 +14,7 @@ interface MuscleGroupCount {
   count: number;
 }
 
-export function getMuscleGroups(): MuscleGroup[] {
+export function useGetMuscleGroups(): MuscleGroup[] {
   const [data, setData] = useState<MuscleGroup[]>([]);
 
   useEffect(() => {
@@ -109,7 +109,7 @@ async function getMuscleGroupCountForUser(
   return muscleGroupCounts;
 }
 
-export function getMuscleGroupCount() {
+export function useGetMuscleGroupCount() {
   const [muscleGroupCounts, setMuscleGroupCounts] = useState<
     MuscleGroupCount[]
   >([]);
@@ -199,7 +199,7 @@ async function getMuscleGroupCountAll(): Promise<MuscleGroupCount[]> {
   return muscleGroupCounts;
 }
 
-export function getAllMuscleGroupCount() {
+export function useGetAllMuscleGroupCount() {
   const [muscleGroupCounts, setMuscleGroupCounts] = useState<
     MuscleGroupCount[]
   >([]);
@@ -251,7 +251,7 @@ async function getTotalVolume(userId: string): Promise<number> {
   return totalVolume;
 }
 
-export function getTotalVolumeForUser() {
+export function useGetTotalVolumeForUser() {
   const [muscleGroupCounts, setMuscleGroupCounts] = useState<number>(0);
 
   useEffect(() => {

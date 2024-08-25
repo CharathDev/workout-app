@@ -1,7 +1,7 @@
 "use client";
 
-import { getRoutineById } from "@/controllers/routines";
-import { getWorkoutItemsById } from "@/controllers/workoutitems";
+import { useGetRoutineById } from "@/controllers/routines";
+import { useGetWorkoutItemsById } from "@/controllers/workoutitems";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import WorkoutItem from "./workoutItem";
@@ -10,7 +10,7 @@ import { IoIosArrowRoundBack } from "react-icons/io";
 const RoutineInfoPage = () => {
   const searchParams = usePathname();
   const routineId = searchParams.split("/")[3];
-  const routineInfo = getRoutineById(routineId);
+  const routineInfo = useGetRoutineById(routineId);
   const router = useRouter();
 
   return (
@@ -32,8 +32,8 @@ const RoutineInfoPage = () => {
             <h3 className="mb-10">You have no workouts in this routine</h3>
           ) : (
             <div className="bg-neutral-900 rounded-lg p-5 my-2 flex flex-col justify-center items-center shadow-lg mb-6">
-              {routineInfo.workouts.map((workout) => (
-                <WorkoutItem workout={workout} />
+              {routineInfo.workouts.map((workout, i) => (
+                <WorkoutItem key={i} workout={workout} />
               ))}
             </div>
           )}

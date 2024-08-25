@@ -1,5 +1,5 @@
 "use client";
-import { getWorkoutItemsById } from "@/controllers/workoutitems";
+import { useGetWorkoutItemsById } from "@/controllers/workoutitems";
 import { firestore } from "@/firebase/firebase";
 import { Workout } from "@/models/Workout";
 import { deleteDoc, doc, setDoc } from "firebase/firestore";
@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 const WorkoutItem = ({ workout }: { workout: Workout }) => {
-  let workout_targets = getWorkoutItemsById(workout.id);
+  let workout_targets = useGetWorkoutItemsById(workout.id);
 
   const router = useRouter();
 
@@ -26,8 +26,8 @@ const WorkoutItem = ({ workout }: { workout: Workout }) => {
         <h2 className="text-lg font-bold">{workout.name}</h2>
 
         {workout_targets &&
-          workout_targets.map((workout_target) => (
-            <h4 className="text-sm text-neutral-400">
+          workout_targets.map((workout_target, i) => (
+            <h4 className="text-sm text-neutral-400" key={i}>
               {`${
                 workout_target.exerciseName
               } ${workout_target.set.toString()}x${workout_target.minReps.toString()}-${workout_target.maxReps.toString()}`}

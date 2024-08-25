@@ -1,7 +1,7 @@
 "use client";
 
-import { getWorkoutItemsById } from "@/controllers/workoutitems";
-import { getWorkoutById } from "@/controllers/workouts";
+import { useGetWorkoutItemsById } from "@/controllers/workoutitems";
+import { useGetWorkoutById } from "@/controllers/workouts";
 import { auth, firestore } from "@/firebase/firebase";
 import LogEntry from "@/models/LogEntry";
 import { WorkoutTarget } from "@/models/WorkoutTarget";
@@ -10,14 +10,14 @@ import { addDoc, collection, doc, getDoc } from "firebase/firestore";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import ExerciseInfoModal from "./ExerciseInfoModal";
-import { getMostRecentLogs } from "@/controllers/logs";
+import { useGetMostRecentLogs } from "@/controllers/logs";
 
 const LogWorkoutPage = () => {
   const searchParams = usePathname();
   const workoutId = searchParams.split("/")[3];
-  const workoutInfo = getWorkoutById(workoutId);
-  const workoutTargetInfo = getWorkoutItemsById(workoutId);
-  const getPastLogInfo = getMostRecentLogs(workoutId);
+  const workoutInfo = useGetWorkoutById(workoutId);
+  const workoutTargetInfo = useGetWorkoutItemsById(workoutId);
+  const getPastLogInfo = useGetMostRecentLogs(workoutId);
   const [user, setUser] = useState<User | null>(null);
   const generateLogEntries = (
     workoutTargetInfo: WorkoutTarget[],
@@ -50,7 +50,7 @@ const LogWorkoutPage = () => {
       const logEntries = generateLogEntries(workoutTargetInfo, workoutId);
       setLog(logEntries);
     }
-  }, [workoutTargetInfo]);
+  }, [workoutTargetInfo, workoutId]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
