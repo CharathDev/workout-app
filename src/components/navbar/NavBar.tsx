@@ -29,6 +29,7 @@ const TopNav = () => {
         "gap-10",
         "flex-col",
         "left-0",
+        "z-50",
       ];
     } else {
       menuClasses = ["hidden", "md:flex"];

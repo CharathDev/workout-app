@@ -40,7 +40,7 @@ const ExercisesPage = () => {
 
   return (
     <div className="bg-neutral-950 flex justify-center">
-      <main className="md:container mx-6 text-center">
+      <main className="container text-center">
         <h1 className="text-4xl font-bold mb-10">Exercises</h1>
 
         <AddExercise />
@@ -60,7 +60,7 @@ const ExercisesPage = () => {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 required
-                className="border-2 outline-none sm:text-sm rounded-lg focus:ring-rose-500 focus:border-rose-500 block w-96 p-2.5 bg-neutral-700 border-neutral-600 placeholder-neutral-500 text-white"
+                className="border-2 outline-none sm:text-sm rounded-lg focus:ring-rose-500 focus:border-rose-500 block w-52 md:w-96 p-2.5 bg-neutral-700 border-neutral-600 placeholder-neutral-500 text-white"
               />
             </div>
             <div className="">
@@ -84,7 +84,7 @@ const ExercisesPage = () => {
               </select>
             </div>
           </div>
-          <div className="w-full grid grid-cols-4 gap-4">
+          <div className="w-full grid 2xl:grid-cols-4 xl:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
             {exercises &&
               searchedExercises()!.map((exercise, i) => (
                 <ExerciseItem exercise={exercise} key={i} />

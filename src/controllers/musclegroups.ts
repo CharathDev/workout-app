@@ -5,7 +5,13 @@ import Exercise from "@/models/Exercise";
 import LogEntry from "@/models/LogEntry";
 import MuscleGroup from "@/models/MuscleGroup";
 import { onAuthStateChanged } from "firebase/auth";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import {
+  collection,
+  DocumentData,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 import { useEffect, useState } from "react";
 
 interface MuscleGroupCount {
@@ -35,6 +41,54 @@ export function useGetMuscleGroups(): MuscleGroup[] {
   return data;
 }
 
+function chunkArray<T>(array: T[], chunkSize: number): T[][] {
+  const chunks: T[][] = [];
+  for (let i = 0; i < array.length; i += chunkSize) {
+    chunks.push(array.slice(i, i + chunkSize));
+  }
+  return chunks;
+}
+
+async function fetchLogEntriesInBatches(logIds: string[]): Promise<LogEntry[]> {
+  const entriesRef = collection(firestore, "log_items");
+  const chunkedLogIds = chunkArray(logIds, 20); // Split logIds into chunks of 30
+
+  const allLogEntries: LogEntry[] = [];
+
+  // Perform queries for each chunk of logIds
+  for (const chunk of chunkedLogIds) {
+    const entriesQuery = query(entriesRef, where("logId", "in", chunk));
+    const querySnapshot = await getDocs(entriesQuery);
+
+    querySnapshot.forEach((doc) => {
+      allLogEntries.push({ id: doc.id, ...doc.data() } as LogEntry);
+    });
+  }
+
+  return allLogEntries;
+}
+
+async function fetchExercisesInBatches(
+  exerciseIds: string[]
+): Promise<Exercise[]> {
+  const exercisesRef = collection(firestore, "exercises");
+  const chunkedExerciseIds = chunkArray(exerciseIds, 30); // Split exerciseIds into chunks of 30
+
+  const allExercises: Exercise[] = [];
+
+  // Perform queries for each chunk of exerciseIds
+  for (const chunk of chunkedExerciseIds) {
+    const exercisesQuery = query(exercisesRef, where("__name__", "in", chunk));
+    const querySnapshot = await getDocs(exercisesQuery);
+
+    querySnapshot.forEach((doc) => {
+      allExercises.push({ id: doc.id, ...doc.data() } as Exercise);
+    });
+  }
+
+  return allExercises;
+}
+
 async function getMuscleGroupCountForUser(
   userId: string
 ): Promise<MuscleGroupCount[]> {
@@ -48,29 +102,14 @@ async function getMuscleGroupCountForUser(
 
   if (logIds.length != 0) {
     // Step 2: Get all log entries that reference these logs
-    const logEntriesQuery = query(
-      collection(firestore, "log_items"),
-      where("logId", "in", logIds)
-    );
-    const logEntriesSnap = await getDocs(logEntriesQuery);
 
-    const logEntries: LogEntry[] = logEntriesSnap.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    })) as LogEntry[];
+    const logEntries: LogEntry[] = await fetchLogEntriesInBatches(logIds);
 
     // Step 3: Get all exercises that match the exerciseId in log entries
     const exerciseIds = logEntries.map((entry) => entry.exerciseId);
-    const exercisesQuery = query(
-      collection(firestore, "exercises"),
-      where("__name__", "in", exerciseIds)
-    );
-    const exercisesSnap = await getDocs(exercisesQuery);
 
-    const exercises: Exercise[] = exercisesSnap.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    })) as Exercise[];
+    const exercises: Exercise[] = await fetchExercisesInBatches(exerciseIds);
+    console.log(exercises);
 
     // Step 4: Get all muscle groups
     const muscleGroupsSnap = await getDocs(
@@ -140,16 +179,8 @@ async function getMuscleGroupCountAll(): Promise<MuscleGroupCount[]> {
   const logIds = logsSnap.docs.map((logDoc) => logDoc.id);
 
   // Step 2: Get all log entries that reference these logs
-  const logEntriesQuery = query(
-    collection(firestore, "log_items"),
-    where("logId", "in", logIds)
-  );
-  const logEntriesSnap = await getDocs(logEntriesQuery);
 
-  const logEntries: LogEntry[] = logEntriesSnap.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
-  })) as LogEntry[];
+  const logEntries: LogEntry[] = await fetchLogEntriesInBatches(logIds);
 
   // Step 3: Get all exercises that match the exerciseId in log entries
   const exerciseIds = logEntries.map((entry) => entry.exerciseId);
@@ -233,16 +264,7 @@ async function getTotalVolume(userId: string): Promise<number> {
   const logIds = logsSnap.docs.map((logDoc) => logDoc.id);
 
   if (logIds.length != 0) {
-    const logEntriesQuery = query(
-      collection(firestore, "log_items"),
-      where("logId", "in", logIds)
-    );
-    const logEntriesSnap = await getDocs(logEntriesQuery);
-
-    const logEntries: LogEntry[] = logEntriesSnap.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    })) as LogEntry[];
+    const logEntries: LogEntry[] = await fetchLogEntriesInBatches(logIds);
 
     const totalVolume = logEntries
       .map(

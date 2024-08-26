@@ -184,6 +184,8 @@ const LogWorkoutPage = () => {
                               ? sum + parseInt(workout.set.toString())
                               : sum;
                           }, 0) + set;
+                        const lastTarget = getPastLogInfo[targetIndex];
+                        console.log(lastTarget);
                         return (
                           <div
                             className="grid grid-cols-4 my-2 md:text-base text-sm"
@@ -195,9 +197,9 @@ const LogWorkoutPage = () => {
                             <div className="flex justify-center items-center">
                               <h2 className="me-2 text-neutral-400">
                                 {getPastLogInfo.length != 0
-                                  ? getPastLogInfo[targetIndex].isWeighted
-                                    ? `${getPastLogInfo[targetIndex].weight}kg * ${getPastLogInfo[targetIndex].reps}`
-                                    : `${getPastLogInfo[targetIndex].reps}`
+                                  ? lastTarget?.isWeighted
+                                    ? `${lastTarget?.weight}kg * ${lastTarget?.reps}`
+                                    : `${lastTarget?.reps}`
                                   : "--"}
                               </h2>
                             </div>

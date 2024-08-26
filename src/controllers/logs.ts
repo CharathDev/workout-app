@@ -115,7 +115,7 @@ async function getLogEntriesForLog(logId: string): Promise<LogEntry[]> {
   const logEntriesQuery = query(
     collection(firestore, "log_items"),
     where("logId", "==", logId),
-    orderBy("set", "asc") // Optionally order by the set number
+    orderBy("order", "asc") // Optionally order by the set number
   );
 
   const logEntriesSnap = await getDocs(logEntriesQuery);
