@@ -11,6 +11,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import ExerciseInfoModal from "./ExerciseInfoModal";
 import { useGetMostRecentLogs } from "@/controllers/logs";
+import { IoIosArrowRoundBack } from "react-icons/io";
 
 const LogWorkoutPage = () => {
   const searchParams = usePathname();
@@ -122,7 +123,18 @@ const LogWorkoutPage = () => {
     <div className="bg-neutral-950">
       {workoutInfo && workoutTargetInfo && log.length > 0 && (
         <main className="md:cotainer mx-6 text-center">
-          <h1 className="text-4xl font-bold mb-10">Log {workoutInfo.name}</h1>
+          <div className="grid grid-cols-3 mb-10">
+            <button
+              className="rounded-full bg-neutral-950 hover:bg-neutral-900 p-2"
+              onClick={() =>
+                router.push(`/user/routines/${workoutInfo.routineId}`)
+              }
+            >
+              <IoIosArrowRoundBack size={32} />
+            </button>
+            <h1 className="text-4xl font-bold">Log {workoutInfo.name}</h1>
+            <div></div>
+          </div>
 
           <div className="bg-neutral-900 rounded-lg p-5 my-2 flex flex-col justify-center items-center shadow-lg mb-6">
             <div className="w-full bg-neutral-800 rounded-md divide-y divide-neutral-500 mb-3">

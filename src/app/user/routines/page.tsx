@@ -24,7 +24,7 @@ const RoutinesPage = () => {
 
   return (
     <div className="bg-neutral-950 flex justify-center">
-      <main className="md:container mx-6 text-center">
+      <main className="container text-center">
         <h1 className="text-4xl font-bold mb-10">Routines</h1>
 
         <AddRoutine />

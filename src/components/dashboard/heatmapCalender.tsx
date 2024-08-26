@@ -57,7 +57,7 @@ const HeatmapCalender = ({
   return (
     <div className="flex flex-col w-full justify-center items-center xl:items-end">
       <div className="flex flex-col justify-center items-end">
-        <div className="grid grid-flow-col gap-1">
+        <div className="grid grid-flow-col gap-0.5 md:gap-1">
           {monthsArray.map((month, i) => (
             <h4
               className="md:text-xs text-xs text-neutral-400 md:w-4 w-2"
