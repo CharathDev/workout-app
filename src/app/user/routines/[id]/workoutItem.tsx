@@ -21,8 +21,8 @@ const WorkoutItem = ({ workout }: { workout: Workout }) => {
   };
 
   return (
-    <div className="bg-neutral-800 p-5 rounded-md flex justify-between my-4  w-full text-center">
-      <div className="flex flex-col items-start justify-center">
+    <div className="bg-neutral-800 p-5 rounded-md flex md:flex-row flex-col justify-between my-4 w-full text-center">
+      <div className="flex flex-col items-center md:items-start justify-center md:mb-0 mb-3">
         <h2 className="text-lg font-bold">{workout.name}</h2>
 
         {workout_targets &&

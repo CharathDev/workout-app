@@ -40,8 +40,8 @@ const RoutineInfoPage = () => {
 
           <div className="flex justify-center items-center ">
             <Link href={`/user/workouts/create_workout/${routineId}`}>
-              <div className="px-4 p-2 bg-rose-500 hover:bg-rose-600 rounded-md cursor-pointer text-neutral-950 font-bold text-lg">
-                +
+              <div className="px-4 p-2 bg-rose-500 hover:bg-rose-600 rounded-md cursor-pointer text-neutral-950 font-bold">
+                + Add Workout
               </div>
             </Link>
           </div>
