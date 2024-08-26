@@ -137,7 +137,7 @@ const LogWorkoutPage = () => {
                 }
                 return (
                   <div className="p-3 mb-6 w-full" key={i}>
-                    <div className="grid grid-cols-3 pb-3">
+                    <div className="grid grid-cols-3 pb-3 md:text-base text-sm">
                       <h2 className="mx-2 text-left">{i + 1}</h2>
                       <h2 className="mx-2">{workoutTarget.exerciseName}</h2>
                       <div className="flex justify-end">
@@ -147,7 +147,7 @@ const LogWorkoutPage = () => {
                       </div>
                     </div>
                     <div className="pt-3">
-                      <div className="grid grid-cols-4 mb-3 text-neutral-500">
+                      <div className="grid grid-cols-4 mb-3 text-neutral-500 md:text-base text-sm">
                         <div className="flex justify-center items-center">
                           <h2 className="me-2">Set </h2>
                         </div>
@@ -174,7 +174,7 @@ const LogWorkoutPage = () => {
                           }, 0) + set;
                         return (
                           <div
-                            className="grid grid-cols-4 my-2"
+                            className="grid grid-cols-4 my-2 md:text-base text-sm"
                             key={targetIndex}
                           >
                             <div className="flex justify-center items-center">
@@ -191,7 +191,7 @@ const LogWorkoutPage = () => {
                               <div className="flex justify-center items-center">
                                 <input
                                   type="number"
-                                  className="border-2 outline-none sm:text-sm rounded-lg focus:ring-rose-500 focus:border-rose-500 block w-16 p-2.5 bg-neutral-700 border-neutral-600 placeholder-neutral-500 text-white"
+                                  className="border-2 outline-none rounded-lg focus:ring-rose-500 focus:border-rose-500 block w-10 md:w-16 p-2.5 bg-neutral-700 border-neutral-600 placeholder-neutral-500 text-white"
                                   name="minReps"
                                   onChange={(e) =>
                                     onWeightChangeHandler(e, targetIndex)
@@ -208,7 +208,7 @@ const LogWorkoutPage = () => {
                             <div className="flex justify-center items-center">
                               <input
                                 type="number"
-                                className="border-2 outline-none sm:text-sm rounded-lg focus:ring-rose-500 focus:border-rose-500 block w-14 p-2.5 bg-neutral-700 border-neutral-600 placeholder-neutral-500 text-white"
+                                className="border-2 outline-none rounded-lg focus:ring-rose-500 focus:border-rose-500 block w-10 md:w-14 p-2.5 bg-neutral-700 border-neutral-600 placeholder-neutral-500 text-white"
                                 name="minReps"
                                 onChange={(e) =>
                                   onRepChangeHandler(e, targetIndex)
