@@ -109,7 +109,6 @@ async function getMuscleGroupCountForUser(
     const exerciseIds = logEntries.map((entry) => entry.exerciseId);
 
     const exercises: Exercise[] = await fetchExercisesInBatches(exerciseIds);
-    console.log(exercises);
 
     // Step 4: Get all muscle groups
     const muscleGroupsSnap = await getDocs(
@@ -184,16 +183,8 @@ async function getMuscleGroupCountAll(): Promise<MuscleGroupCount[]> {
 
   // Step 3: Get all exercises that match the exerciseId in log entries
   const exerciseIds = logEntries.map((entry) => entry.exerciseId);
-  const exercisesQuery = query(
-    collection(firestore, "exercises"),
-    where("__name__", "in", exerciseIds)
-  );
-  const exercisesSnap = await getDocs(exercisesQuery);
 
-  const exercises: Exercise[] = exercisesSnap.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
-  })) as Exercise[];
+  const exercises: Exercise[] = await fetchExercisesInBatches(exerciseIds);
 
   // Step 4: Get all muscle groups
   const muscleGroupsSnap = await getDocs(

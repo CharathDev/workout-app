@@ -10,6 +10,7 @@ import { useGetAllMuscleGroupCount } from "@/controllers/musclegroups";
 import WorkoutDoughnutChart from "@/components/dashboard/musclesWorkedDonutChart";
 import { useGetTopExercises } from "@/controllers/exercises";
 import TopExercisesChart from "@/components/dashboard/topExercises";
+
 const DashboardPage = () => {
   const [user, setUser] = useState<User | null>(null);
   const [userName, setUserName] = useState<string | null>(null);

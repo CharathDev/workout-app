@@ -26,9 +26,12 @@ const LoginPage = () => {
         user.password
       );
       const newUser = userCredentials.user;
+      const token = await newUser.getIdToken();
+      document.cookie = `token=${token}; path=/;`;
 
       let docRef = doc(firestore, "users", newUser.uid);
       const userInfo = await getDoc(docRef);
+      document.cookie = `role=${userInfo.data()!.isAdmin}; path=/;`;
       if (userInfo.data()!.isAdmin) {
         router.push("/admin/dashboard");
       } else {

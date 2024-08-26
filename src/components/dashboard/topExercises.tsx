@@ -12,7 +12,7 @@ interface ExerciseCount {
 }
 
 const TopExercisesChart = ({ exercises }: { exercises: ExerciseCount[] }) => {
-  const finalExercises = exercises.filter((exercise, i) => i < 10);
+  const finalExercises = exercises.filter((exercise, i) => i < 5);
 
   const data = {
     labels: finalExercises.map((exercise) => exercise.name),
