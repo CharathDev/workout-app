@@ -42,7 +42,6 @@ const TopNav = () => {
       setUser(user);
       if (user) {
         let temp = await getDoc(doc(firestore, "users", user.uid));
-        console.log("pls");
         setUserInfo(temp.data()!);
       }
     });
@@ -65,7 +64,7 @@ const TopNav = () => {
         <nav className=" bg-neutral-950 text-white p-4 sm:p-4 md:flex md:justify-between md:items-center">
           <div className="container mx-auto flex justify-between items-center">
             <a href="/dashboard" className="text-2xl font-bold">
-              Workout App
+              Grindset
             </a>
             <div className="flex">
               <div className={getMenuClasses()}>
