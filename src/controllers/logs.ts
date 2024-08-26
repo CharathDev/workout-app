@@ -103,7 +103,7 @@ async function getMostRecentLogForCurrentWorkout(
     return {
       id: doc.id,
       ...doc.data(),
-      date: doc.data().timestamp.toDate(), // Convert Firestore timestamp to JS Date
+      date: doc.data(), // Convert Firestore timestamp to JS Date
     } as Log;
   } else {
     return null;
