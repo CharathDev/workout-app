@@ -149,10 +149,10 @@ const LogWorkoutPage = () => {
                     <div className="pt-3">
                       <div className="grid grid-cols-4 mb-3 text-neutral-500">
                         <div className="flex justify-center items-center">
-                          <h2 className="me-2">Last </h2>
+                          <h2 className="me-2">Set </h2>
                         </div>
                         <div className="flex justify-center items-center">
-                          <h2 className="me-2">Set </h2>
+                          <h2 className="me-2">Last </h2>
                         </div>
                         <div className="flex justify-center items-center">
                           {workoutTarget.isWeighted ? (
