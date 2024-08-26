@@ -46,6 +46,7 @@ const RegisterPage = () => {
         lastName: user.lastName,
         email: newUser.email,
         isAdmin: false,
+        weights: [],
       });
 
       setUser({
