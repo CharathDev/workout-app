@@ -35,11 +35,12 @@ const MusclesWorked = () => {
       (muscleGroupInfo) => muscleGroupInfo.name == muscle
     );
     const colorIndex = Math.min(
-      Math.floor(
+      Math.ceil(
         getIntesity(muscleGroup ? muscleGroup.count : 0) * colorList.length
       ) - 1,
       colorList.length
     );
+    console.log(colorIndex + " " + muscleGroup?.name);
     return colorList[colorIndex];
   };
 
