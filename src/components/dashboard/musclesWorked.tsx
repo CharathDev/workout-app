@@ -40,7 +40,6 @@ const MusclesWorked = () => {
       ) - 1,
       colorList.length
     );
-    console.log(colorIndex + " " + muscleGroup?.name);
     return colorList[colorIndex];
   };
 
