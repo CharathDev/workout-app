@@ -22,7 +22,7 @@ const LogsPage = () => {
             {logs.map((log, i) => (
               <div
                 key={i}
-                className="w-full bg-neutral-800 rounded-md mb-3 p-5 flex justify-between cursor-pointer hover:bg-neutral-700 hover:scale-101 transition-transform transition-colors"
+                className="w-full bg-neutral-800 rounded-md mb-3 p-5 flex justify-between cursor-pointer hover:bg-neutral-700 hover:scale-101 transition-all"
                 onClick={() =>
                   router.push(`/user/logs/${log.id}/${log.workoutId}`)
                 }
