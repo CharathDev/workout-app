@@ -5,6 +5,7 @@ import { Workout } from "@/models/Workout";
 import { deleteDoc, doc, setDoc } from "firebase/firestore";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
 
 const WorkoutItem = ({ workout }: { workout: Workout }) => {
   let workout_targets = useGetWorkoutItemsById(workout.id);
@@ -12,12 +13,28 @@ const WorkoutItem = ({ workout }: { workout: Workout }) => {
   const router = useRouter();
 
   const handleDelete = async () => {
-    await setDoc(doc(firestore, "workouts", workout.id), {
-      name: workout.name,
-      routineId: workout.routineId,
-      isActivated: false,
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+        });
+        await setDoc(doc(firestore, "workouts", workout.id), {
+          name: workout.name,
+          routineId: workout.routineId,
+          isActivated: false,
+        });
+      }
     });
-    console.log("pls");
   };
 
   return (

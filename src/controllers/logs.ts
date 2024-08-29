@@ -152,3 +152,38 @@ export function useGetMostRecentLogs(workoutId: string) {
 
   return logEntries;
 }
+
+async function getLog(logId: string): Promise<Log> {
+  const log = await getDoc(doc(firestore, "logs", logId));
+  const workoutName = await fetchWorkoutName(log.data()!.workoutId);
+  const logData = {
+    id: log.id,
+    workoutName: workoutName,
+    ...log.data(),
+  } as Log;
+  return logData;
+}
+
+export function useGetLogInfo(logId: string): [LogEntry[], Log | null] {
+  const [logEntries, setLogEntries] = useState<LogEntry[]>([]);
+  const [log, setLog] = useState<Log | null>(null);
+
+  useEffect(() => {
+    const unsubscribeAuth = onAuthStateChanged(auth, async (user) => {
+      if (user && logId) {
+        const mostRecentLog = await getLog(logId);
+        setLog(mostRecentLog);
+        if (mostRecentLog) {
+          const entries = await getLogEntriesForLog(logId);
+          setLogEntries(entries);
+        }
+      }
+    });
+
+    return () => {
+      unsubscribeAuth();
+    };
+  }, [logId]);
+
+  return [logEntries, log];
+}

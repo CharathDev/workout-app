@@ -1,4 +1,5 @@
 import Log from "@/models/Log";
+import { useRouter } from "next/navigation";
 
 const HeatmapCalender = ({
   logs,
@@ -37,6 +38,7 @@ const HeatmapCalender = ({
   const startingMonth = startingDate.getMonth();
   const diff = currentMonth - months;
   const monthsArray: string[] = [];
+  const router = useRouter();
 
   for (let i = 0; i < weeksToShow; i++) {
     let thisDate = new Date(
@@ -86,9 +88,15 @@ const HeatmapCalender = ({
                       : "bg-rose-500 cursor-pointer"
                   }`}
                   data-title={`${day} ${
-                    currentLog ? `You logged ${currentLog.workoutName}` : ""
+                    currentLog ? `: You logged ${currentLog.workoutName}` : ""
                   }`}
                   key={index}
+                  onClick={() =>
+                    currentLog &&
+                    router.push(
+                      `/user/logs/${currentLog.id}/${currentLog.workoutId}`
+                    )
+                  }
                 ></div>
               );
             })}

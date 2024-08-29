@@ -23,6 +23,9 @@ const config: Config = {
       gap: {
         "0.5": "2px",
       },
+      scale: {
+        "101": "1.01",
+      },
     },
   },
   plugins: [],

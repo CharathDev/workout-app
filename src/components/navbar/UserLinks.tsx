@@ -15,6 +15,12 @@ const UserLinks = () => {
       >
         Routines
       </Link>
+      <Link
+        href={"/user/logs"}
+        className="mx-2 hover:text-gray-300 text-center py-2"
+      >
+        Logs
+      </Link>
     </>
   );
 };

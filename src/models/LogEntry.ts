@@ -7,4 +7,5 @@ export default interface LogEntry {
   weight: Number;
   reps: Number;
   isWeighted: boolean;
+  exerciseName?: string;
 }
