@@ -12,12 +12,30 @@ import {
   doc,
   orderBy,
   limit,
+  Timestamp,
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
+type TrendResult = {
+  exerciseId: string;
+  exerciseName: string;
+  thisWeek: string;
+  lastWeek: string;
+  thisWeekAvg: number;
+  lastWeekAvg: number;
+  percentChange: number;
+  trend: "increase" | "decrease" | "no change";
+};
+
+type StrengthTrendSummary = {
+  averagePercentChange: number;
+  globalTrend: "increase" | "decrease" | "no change";
+  details: TrendResult[];
+};
+
 async function fetchWorkoutName(workoutId: string): Promise<string> {
   const workoutDoc = await getDoc(doc(firestore, "workouts", workoutId));
-  return workoutDoc.exists() ? workoutDoc.data()?.name ?? null : null;
+  return workoutDoc.exists() ? workoutDoc.data()?.name ?? null : "";
 }
 
 export const useGetLogsByUser = (): Log[] | null => {

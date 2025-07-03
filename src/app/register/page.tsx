@@ -47,6 +47,8 @@ const RegisterPage = () => {
         email: newUser.email,
         isAdmin: false,
         weights: [],
+        steps: [],
+        sleep: [],
       });
 
       setUser({

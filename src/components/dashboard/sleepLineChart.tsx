@@ -5,22 +5,22 @@ const Line = dynamic(() => import("react-chartjs-2").then((mod) => mod.Line), {
   ssr: false,
 });
 
-const WeightLineChart = ({ weights }: { weights: any[] }) => {
+const SleepLineChart = ({ sleep }: { sleep: any[] }) => {
   const data = {
-    labels: weights.map(
-      (weight) =>
-        new Date(weight.date).getDate() +
+    labels: sleep.map(
+      (sleepHours) =>
+        new Date(sleepHours.date).getDate() +
         "-" +
-        (new Date(weight.date).getMonth() + 1) +
+        (new Date(sleepHours.date).getMonth() + 1) +
         "-" +
-        new Date(weight.date).getFullYear()
+        new Date(sleepHours.date).getFullYear()
     ),
     datasets: [
       {
-        label: "Weights",
-        data: weights.map((weight) => weight.weight),
+        label: "Sleep",
+        data: sleep.map((sleepHours) => sleepHours.sleep),
         fill: true,
-        borderColor: "rgb(244,63,94)",
+        borderColor: "rgb(6 182 212)",
         tension: 0.1,
       },
     ],
@@ -46,4 +46,4 @@ const WeightLineChart = ({ weights }: { weights: any[] }) => {
     </div>
   );
 };
-export default WeightLineChart;
+export default SleepLineChart;

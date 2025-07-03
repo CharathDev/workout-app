@@ -5,22 +5,22 @@ const Line = dynamic(() => import("react-chartjs-2").then((mod) => mod.Line), {
   ssr: false,
 });
 
-const WeightLineChart = ({ weights }: { weights: any[] }) => {
+const StepsLineChart = ({ steps }: { steps: any[] }) => {
   const data = {
-    labels: weights.map(
-      (weight) =>
-        new Date(weight.date).getDate() +
+    labels: steps.map(
+      (step) =>
+        new Date(step.date).getDate() +
         "-" +
-        (new Date(weight.date).getMonth() + 1) +
+        (new Date(step.date).getMonth() + 1) +
         "-" +
-        new Date(weight.date).getFullYear()
+        new Date(step.date).getFullYear()
     ),
     datasets: [
       {
-        label: "Weights",
-        data: weights.map((weight) => weight.weight),
+        label: "Steps",
+        data: steps.map((step) => step.steps),
         fill: true,
-        borderColor: "rgb(244,63,94)",
+        borderColor: "rgb(139 92 246)",
         tension: 0.1,
       },
     ],
@@ -40,10 +40,10 @@ const WeightLineChart = ({ weights }: { weights: any[] }) => {
   return (
     <div
       style={{ height: "800px" }}
-      className="w-full xl:px-12 flex justify-center items-center relative"
+      className="w-full xl:p-12 flex justify-center items-center relative"
     >
       <Line data={data} options={options} />
     </div>
   );
 };
-export default WeightLineChart;
+export default StepsLineChart;
