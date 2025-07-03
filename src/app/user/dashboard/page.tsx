@@ -13,9 +13,16 @@ import MusclesWorked from "@/components/dashboard/musclesWorked";
 import { useGetTotalVolumeForUser } from "@/controllers/musclegroups";
 import AddWeightForm from "@/components/forms/dashboard/AddWeight";
 import WeightLineChart from "@/components/dashboard/weigthLineChart";
+import DailyInsights from "@/components/dashboard/dailyInsights";
+import AddStepsForm from "@/components/forms/dashboard/AddSteps";
+import StepsLineChart from "@/components/dashboard/stepsLineChart";
+import AddSleepForm from "@/components/forms/dashboard/AddSleep";
+import SleepLineChart from "@/components/dashboard/sleepLineChart";
 
 const DashboardPage = () => {
   const [reset, setReset] = useState(false);
+  const [reset1, setReset1] = useState(false);
+  const [reset2, setReset2] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [userInfo, setUserInfo] = useState<DocumentData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -36,6 +43,13 @@ const DashboardPage = () => {
             new Date(Date.now()).getMonth() +
             "-" +
             new Date(Date.now()).getFullYear();
+          const yesterdayTime = Date.now() - 24 * 60 * 60 * 1000;
+          const yesterday =
+            new Date(yesterdayTime).getDate() +
+            "-" +
+            new Date(yesterdayTime).getMonth() +
+            "-" +
+            new Date(yesterdayTime).getFullYear();
           const userFinalData = {
             ...userData,
             weightLogged: userData.weights.find((weight: any) => {
@@ -48,6 +62,30 @@ const DashboardPage = () => {
                 today
               );
             }),
+            stepsLogged: userData.steps
+              ? userData.steps.find((step: any) => {
+                  return (
+                    new Date(step.date).getDate() +
+                      "-" +
+                      new Date(step.date).getMonth() +
+                      "-" +
+                      new Date(step.date).getFullYear() ==
+                    yesterday
+                  );
+                })
+              : false,
+            sleepLogged: userData.sleep
+              ? userData.sleep.find((sleep: any) => {
+                  return (
+                    new Date(sleep.date).getDate() +
+                      "-" +
+                      new Date(sleep.date).getMonth() +
+                      "-" +
+                      new Date(sleep.date).getFullYear() ==
+                    today
+                  );
+                })
+              : false,
           };
           setUserInfo(userFinalData);
         }
@@ -59,7 +97,7 @@ const DashboardPage = () => {
 
     // Cleanup subscription on unmount
     return () => unsubscribe();
-  }, [router, reset]);
+  }, [router, reset, reset1, reset2]);
 
   if (loading) {
     return <PuffLoader />;
@@ -96,18 +134,51 @@ const DashboardPage = () => {
               </div>
             </div>
 
+            <div className="bg-neutral-800 rounded-lg md:p-5 p-2 flex flex-col justify-center items-center shadow-lg w-full mb-5">
+              <h2 className="text-2xl mb-2 font-bold">Daily Insights</h2>
+
+              <DailyInsights user={userInfo} userId={user.uid} />
+            </div>
+
             <div className="bg-neutral-800 rounded-lg md:p-5 p-2 flex flex-col justify-center items-center shadow-lg w-full">
-              <h2 className="text-2xl mb-2 font-bold">Weight Tracking</h2>
+              <h2 className="text-2xl mb-2 font-bold">Stats Tracking</h2>
 
-              {!userInfo.weightLogged && (
-                <AddWeightForm
-                  user={userInfo}
-                  userId={user.uid}
-                  setReset={setReset}
-                />
-              )}
+              <div className="flex mb-2">
+                {!userInfo.weightLogged && (
+                  <AddWeightForm
+                    user={userInfo}
+                    userId={user.uid}
+                    setReset={setReset}
+                  />
+                )}
+                {!userInfo.stepsLogged && (
+                  <AddStepsForm
+                    user={userInfo}
+                    userId={user.uid}
+                    setReset={setReset1}
+                  />
+                )}
+                {!userInfo.sleepLogged && (
+                  <AddSleepForm
+                    user={userInfo}
+                    userId={user.uid}
+                    setReset={setReset2}
+                  />
+                )}
+              </div>
 
-              <WeightLineChart weights={userInfo.weights} />
+              <div className="w-full mb-3">
+                <h4 className="text-xl mb-2 font-semibold">Weight (KG)</h4>
+                <WeightLineChart weights={userInfo.weights} />
+              </div>
+              <div className="w-full mb-3">
+                <h4 className="text-xl mb-2 font-semibold">Steps</h4>
+                <StepsLineChart steps={userInfo.steps ?? []} />
+              </div>
+              <div className="w-full mb-3">
+                <h4 className="text-xl mb-2 font-semibold">Sleep (Hours)</h4>
+                <SleepLineChart sleep={userInfo.sleep ?? []} />
+              </div>
             </div>
           </div>
         </main>

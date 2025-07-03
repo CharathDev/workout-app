@@ -13,7 +13,7 @@ interface MuscleGroupCount {
 
 const MusclesWorked = () => {
   const muscleGroups = useGetMuscleGroupCount();
-  console.log(muscleGroups);
+
   const colorList = [
     "fill-rose-400",
     "fill-rose-500",
